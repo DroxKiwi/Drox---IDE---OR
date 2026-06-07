@@ -1,396 +1,130 @@
-Doc moteur brute — conventions : [RULES.md §5](RULES.md#5-readmemd-racine--doc-moteur)
-
-## Sommaire
-
-[Schéma 1.3 — prompts & outils](#schema-13)
-
-**FR**
-
-[Moteur Drox](#fr) · [Invariants](#fr-invariants) · [Chronologie](#fr-chronologie)
-
-[2025-12](#fr-2025-12) · [2026-02](#fr-2026-02) · [2026-02-fin](#fr-2026-02-fin) · [2026-03](#fr-2026-03) · [2026-04](#fr-2026-04) · [2026-05 v1_2](#fr-2026-05-v12) · [2026-05 v1_3](#fr-2026-05-v13)
-
-**EN**
-
-[Drox Engine](#en) · [Invariants](#en-invariants) · [Timeline](#en-timeline)
-
-[2025-12](#en-2025-12) · [2026-02](#en-2026-02) · [2026-02-end](#en-2026-02-end) · [2026-03](#en-2026-03) · [2026-04](#en-2026-04) · [2026-05 v1_2](#en-2026-05-v12) · [2026-05 v1_3](#en-2026-05-v13)
-
-___
-
-<a id="schema-13"></a>
-
-## Schéma — 1.3 (prompts & outils)
+# Drox IDE — releases officielles
 
-Run `agent.run` · orchestration architecte / exécuteur (`DROX_ORCHESTRATION=v1_2`) · lot **1.3** : batch parallèle, `FailurePacket`, re-délégation ciblée · sous-agent legacy `task` désactivé.
+**Ce dépôt** : binaires Windows, manifestes de mise à jour (`stable/latest.json`), notes de version.  
+**Pas les sources** — produit propriétaire [KDDS](https://github.com/DroxKiwi). Socle Code OSS (MIT) + moteur Drox — voir [NOTICE.md](NOTICE.md).
 
-**Vue d’ensemble**
+**Dernière version** : [1.3.2](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest)
 
-```mermaid
-flowchart LR
-  IDE(["Client IDE"])
-  MOT(("Moteur Rust 1.3"))
-  ARC[["Architecte transcript parent"]]
-  EXE1[["Executeur 1"]]
-  EXE2[["Executeur N"]]
-
-  IDE <-->|NDJSON stdio| MOT
-  MOT --- ARC
-  ARC -->|delegate_executor sync| EXE1
-  ARC -->|batch scopes disjoints| EXE2
-  EXE1 -.->|rapport synthese| ARC
-  EXE2 -.->|results batch| ARC
-```
+---
 
-**Prompts & registres par rôle**
+## FR
 
-```mermaid
-flowchart TB
-  subgraph arch_p [Architecte]
-    direction LR
-    a1["RunSpec Architect"]
-    a2["architect_system_prompt"]
-    a3["assemble_system_prompt"]
-    a4["allowlist 6 outils par tour"]
-    a1 --> a2 --> a3 --> a4
-  end
-
-  subgraph exe_p [Executeur]
-    direction LR
-    e1["RunSpec Executor"]
-    e2["EXECUTOR_SYSTEM_PROMPT"]
-    e3["brief tache scope"]
-    e4["allowlist 2 outils par tour"]
-    e1 --> e2 --> e3 --> e4
-  end
+### C’est quoi, Drox IDE ?
 
-  arch_p -.->|delegate_executor| exe_p
-```
+Un IDE pour coder **avec un agent local** — pas un wrapper Copilot, pas un SaaS qui aspire ton repo. Tu installes, tu branches **Ollama** (ou une API compatible), tu parles à **Drox Chat**. Point.
 
-**Cycle d’une délégation**
+L’app embarque le binaire **`drox`** (moteur Rust). Pas de compte KDDS obligatoire. Pas de télémétrie Microsoft dans le package. Les MAJ passent par ce repo (`latest.json` + Releases GitHub).
 
-```mermaid
-sequenceDiagram
-  autonumber
-  participant IDE as Client
-  participant ARC as Architecte
-  participant DEL as delegate_executor
-  participant EXE as Executeur
+### Le moteur Drox — ce qu’il sait faire (sans spoiler le code)
 
-  IDE->>ARC: agent.run et events
-  Note over ARC: gates phases todo_write
+Le moteur, c’est le cerveau **hors du navigateur** : boucle LLM ↔ outils, en local. L’IDE ne fait que l’UI, le LSP, les diffs et les trucs qu’un binaire ne peut pas faire seul dans ton workspace.
 
-  ARC->>DEL: tasks 1 ou batch
-  DEL->>DEL: scope_disjoint_gate
-  par Executeurs paralleles
-    DEL->>EXE: sous-run bloquant
-    loop tour executeur
-      EXE->>IDE: tool exec lsp
-      IDE-->>EXE: resultat
-    end
-    EXE->>EXE: agent-output
-  end
-  DEL->>DEL: truth_check FailurePacket
-  DEL-->>ARC: reportMarkdown verified
-  opt echec partiel
-    ARC->>DEL: retry_per_task 1 tache
-    DEL-->>ARC: nouveau rapport
-  end
-  Note over ARC: pas de transcript executeur complet
-```
+**Deux têtes, un patron**
 
-| Identifiant | Fonction |
-|-------------|----------|
-| `RunSpec` | Allowlist + limites par rôle ; seuls ces outils partent au LLM |
-| `assemble_system_prompt` | Contexte workspace sur l’Architecte uniquement |
-| `delegate_executor` | Sync ; batch `tasks[]` ; architecte en attente |
-| `parallel_batch` | Plusieurs exécuteurs si scopes disjoints et slots libres |
-| `failure_absorption` | `truth_check` + `FailurePacket` dans le rapport |
-| `retry_per_task` | Re-délégation d’une tâche seule après échec partiel |
-| `architect_gates` | Anti-rattrapage, cap relances, todo ouvert avant `done` |
+- **Architecte** — comprend la demande, pose un plan (`todo_write`), découpe le boulot, **délègue** au lieu de tout mâcher dans un seul fil de chat.
+- **Exécuteurs** — agents courts, **périmètre verrouillé** (un scope = pas de vadrouille dans tout le monorepo). Plusieurs tâches **en parallèle** si les scopes ne se marchent pas dessus.
 
-___
+**Modes**
 
-<a id="fr"></a>
+- **Discussion** — salut, avis, explication : réponse directe, pas de circus d’outils.
+- **Édition** — tu veux du concret : lecture workspace, grep, patches, commandes, livrables dans `.drox/agent-output/`.
 
-# Moteur Drox
+**Outils (côté utilisateur, pas côté rust)**
 
-Binaire Rust (`drox-engine/drox/`) qui fait tourner une boucle LLM + outils en local. Le client (IDE) lance `drox --serve`, lit du NDJSON sur stdio, et exécute ce qui ne peut pas tourner dans le moteur (LSP, diff, questions UI). Inférence via Ollama ou API compatible. Produit KDDS — pas de cloud propriétaire imposé.
+- Fichiers : lire, écrire, éditer, chercher (`grep` / `glob`).
+- Terminal contrôlé (`bash`), fetch web en lecture.
+- **LSP** (définitions, refs, diagnostics) — exécuté par l’IDE, résultat renvoyé au moteur.
+- Plan / todos, questions utilisateur (oui/non, choix multiples).
+- **Sessions** persistantes, historique, compaction quand ça grossit.
+- Mémoire projet (fichiers `.drox/`, notes de session) pour ne pas repartir de zéro à chaque run.
 
-___
+**Garde-fous (le truc qui évite les runs pourris)**
 
-<a id="fr-invariants"></a>
+- Pas de « j’ai fini » tant qu’il reste des todos ouverts.
+- Pas de délégation sans plan.
+- Pas de scope exécuteur flou du type « refacto tout le projet ».
+- Si un exécuteur plante : rapport d’échec structuré, retry ciblé — pas un dump de 400 messages dans ton chat.
 
-## Invariants
+**Ce que ce n’est pas (encore)**
 
-`moteur_seul` — phases, gates, orchestration et registre d’outils vivent dans Rust ; le client ne décide pas du protocole agent.
-`done_obligatoire` — fin de run uniquement sur marqueur `[phase: done]` ; pas de « plus d’outil donc on arrête ».
-`answering_avant_done` — `done` refusé ou nudgé si `answering` n’a pas été vu dans le run.
-`phases_marqueurs` — le modèle annonce `analyzing`, `reading`, `acting`, `testing`, `answering`, etc. ; seul le texte sous `answering` est la réponse utilisateur.
-`architecte_pas_executant` — rôle architecte : plan + délégation ; pas de glob/grep/file_read pour rattraper un exécuteur (gates).
-`brief_delegate` — chaque `delegate_executor` embarque instructions, livrable, `scope` ; pas un titre vide.
-`rapport_synthese` — l’architecte reçoit un rapport exécuteur résumé, pas le transcript intégral du sous-run.
-`roles_pas_tiers` — vignettes Low/Medium abandonnées ; remplacées par modèles et registres séparés architecte / exécuteur.
-`batch_parallel_with` — plusieurs tâches exécuteur dans un seul appel ; scopes disjoints ; plafond `maxParallelExecutors`.
+- Pas d’index sémantique / RAG maison au niveau 1.3.2 (prévu 1.3.3).
+- Pas de cloud KDDS imposé — ton LLM, ta machine.
+- Pas open source : on décrit les **capacités**, pas la recette.
 
-___
+### Installer / mettre à jour
 
-<a id="fr-chronologie"></a>
+1. [Releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases) → `Drox-IDE-Setup-*-win32-x64.exe`
+2. **Ollama** recommandé : [ollama.com](https://ollama.com/)
+3. L’IDE vérifie `stable/latest.json` au démarrage ; notif si une version plus récente est publiée ici.
 
-## Chronologie
+### Liens
 
-<a id="fr-2025-12"></a>
+| | |
+|---|---|
+| Licence & attributions | [NOTICE.md](NOTICE.md) |
+| Notes 1.3.2 | [stable/1.3.2/RELEASE_NOTES.md](stable/1.3.2/RELEASE_NOTES.md) |
+| Issues (install, MAJ) | [Issues](https://github.com/DroxKiwi/Drox---IDE---OR/issues) |
 
-### 2025-12 — amorçage
+---
 
-`drox_cli` — binaire `drox`.
-`serve_stdio` — mode `drox --serve`, JSON-RPC NDJSON.
-`rpc_base` — `initialize`, `agent.run`, `agent.cancel`, `session.list`, `session.read`, `session.compact`, `shutdown`.
-`rpc_client` — `tool/exec`, `user/ask` (serveur → client).
-`agent_loop` — tours LLM, `tool_calls`, events `agent/event`, transcript JSONL.
-`drox_llm` — client Ollama, stream, retry, tool calls, reprise sur `MaxTokens`.
-`tools_fichiers` — `file_read`, `file_write`, `file_edit`, `grep`, `glob`, `bash`, `web_fetch`.
-`plan_mode` — `plan_mode`, `exit_plan_mode`, `ask_user_question`.
-`drox_permissions` — allow / ask / deny, modes permission.
-`drox_session` — sessions, transcript, `MEMORY.md`, `DROX.md`.
-`drox_context` — comptage tokens, snip `tool_result`.
-`session_compact_rpc` — compaction manuelle `session.compact` / `summarize_run`.
-`mcp_stubs` — `drox-mcp`, outils `mcp__*`.
+## EN
 
-___
+### What is Drox IDE?
 
-<a id="fr-2026-02"></a>
+An IDE built around a **local coding agent** — not a Copilot skin, not a SaaS vacuuming your repo. Install, point **Ollama** (or a compatible API) at it, use **Drox Chat**. Done.
 
-### 2026-02
+The app ships the **`drox`** engine (Rust). No mandatory KDDS account. No Microsoft telemetry in the package. Updates are served from this repo (`latest.json` + GitHub Releases).
 
-`multimodal` — images utilisateur → `Content::Image`, champ Ollama `images`.
-`web_search` — recherche DuckDuckGo HTML, read-only.
-`lsp_remote` — tool `lsp` ; exécution IDE.
-`ollama_defaults` — `num_ctx`, `num_predict`, sampling, `keep_alive` top-level.
+### The Drox engine — what it can do (no implementation spoilers)
 
-___
+The engine is the **brain outside the webview**: LLM ↔ tools loop, on your machine. The IDE handles UI, LSP, diffs, and anything a standalone binary cannot safely do in your workspace.
 
-<a id="fr-2026-02-fin"></a>
+**Two roles, one boss**
 
-### 2026-02-fin
+- **Architect** — understands the ask, builds a plan (`todo_write`), splits work, **delegates** instead of rambling in one endless chat thread.
+- **Executors** — short-lived agents with a **locked scope** (one scope = no wandering across the whole monorepo). Multiple tasks **in parallel** when scopes do not overlap.
 
-`todo_write` — liste `{ id, content, status }`.
-`phase_protocol` — `[phase: …]`, `PhaseEnter`, inférence, alias.
-`nudge_tour_vide` — relance si tour sans outil ni `done`.
-`gate_todo_ouverte` — `done` bloqué si pending/in_progress.
-`glob_dirs` — `glob` renvoie fichiers et répertoires.
-`loop_detector` — deux tours identiques → `LoopDetected`.
-`todo_recreation_block` — second plan interdit après plan 100 % completed.
-`memory_sessions` — `.drox/memory/sessions/*.md`, `memory_read`, `memory_list`, `session_note`, `MemoryPersisted`.
-`compaction_live_v1` — microcompact, tail bornée, `compact_until_budget`, events snip/compact.
-`paste_inject` — bloc `[Smart paste]` dans le prompt (côté client).
-`user_ask` — `ask_user_question` multi + RPC `user/ask`.
-`msg_queue` — file messages pendant run (client).
-`ctx_policy_num_ctx` — autocompact calé sur fenêtre Ollama réelle.
+**Modes**
 
-___
+- **Discuss** — hi, opinions, explanations: direct answer, no tool circus.
+- **Edit** — you want real work: workspace reads, grep, patches, commands, deliverables under `.drox/agent-output/`.
 
-<a id="fr-2026-03"></a>
+**Tools (user-facing)**
 
-### 2026-03
+- Files: read, write, edit, search (`grep` / `glob`).
+- Controlled shell (`bash`), read-only web fetch.
+- **LSP** (definitions, references, diagnostics) — run by the IDE, results fed back to the engine.
+- Plan / todos, user questions (yes/no, multiple choice).
+- **Persistent sessions**, history, compaction when context gets fat.
+- Project memory (`.drox/` files, session notes) so every run does not start from zero.
 
-`long_memory_v1` — index compaction, `session_search`, `/session_end` → `session_closure` (pas de tool `session_end` LLM).
-`compaction_live_v2` — boucle jusqu’au budget.
-`hooks_json` — `.drox/hooks.json`, Pre/Post tool shell.
-`parallel_read_tools` — reads concurrency-safe, `max_parallel_tool_calls`.
-`bash_classifier` — segments bash auto-allow / auto-deny.
-`file_rules` — permissions chemins, `settings.local.json`.
-`copy_path`, `delete_path` — outils dédiés.
-`notebook_edit` — cellules ipynb replace/insert/delete.
+**Guardrails (the stuff that stops garbage runs)**
 
-___
+- No “I’m done” while todos are still open.
+- No delegation without a plan.
+- No vague executor scope like “refactor the entire project”.
+- Executor failure → structured failure report, targeted retry — not a 400-message transcript dump in your chat.
 
-<a id="fr-2026-04"></a>
+**What it is not (yet)**
 
-### 2026-04
+- No home-grown semantic index / RAG at 1.3.2 level (planned 1.3.3).
+- No forced KDDS cloud — your LLM, your machine.
+- Not open source: we describe **capabilities**, not the recipe.
 
-`skills` — `.drox/skills/`, `skill_read`, `skill_list`.
-`git_worktree` — `git_worktree_enter`, `git_worktree_exit`.
-`mcp_hub` — registre MCP, resources, `mcp_call` fallback.
-`professor_mode` — `course_plan_write`, gates, `.drox/course-cycles/`.
-`tools_toggle` — `drox.tools.disabled`, MCP on/off.
-`phase_analyzing` — phase + nudge exploration.
-`phase_testing` — gate `done` après mutation code.
-`workspace_map` — `.drox/workspace-map.json`, read/note, miroir outils.
-`droxignore` — chemins exclus agent.
-`run_objective` — objectif verrouillé, `scope_defer`.
-`subagent_task` — tool `task` Explore, off par défaut.
-`image_paths_prompt` — chemins images dans le prompt.
-`agent_split` — modules `agent/` (gates, phases, nudges, stream).
-`run_policy` — couche `RunPolicy` (transitoire, avant abandon tiers).
-`tiers_low_medium_abandon` — expérience avril, retirée au profit `v1_2`.
+### Install / update
 
-___
+1. [Releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases) → `Drox-IDE-Setup-*-win32-x64.exe`
+2. **Ollama** recommended: [ollama.com](https://ollama.com/)
+3. The IDE checks `stable/latest.json` on startup; you get a notification when a newer release is published here.
 
-<a id="fr-2026-05-v12"></a>
+### Links
 
-### 2026-05 — `v1_2`
+| | |
+|---|---|
+| License & attributions | [NOTICE.md](NOTICE.md) |
+| 1.3.2 notes | [stable/1.3.2/RELEASE_NOTES.md](stable/1.3.2/RELEASE_NOTES.md) |
+| Issues (install, updates) | [Issues](https://github.com/DroxKiwi/Drox---IDE---OR/issues) |
 
-`orchestration_v1_2` — `DROX_ORCHESTRATION=v1_2` remplace `legacy` mono-agent.
-`run_spec` — rôle, limites, registre outils par `RunSpec`.
-`role_architect` — `workspace_map_read`, `todo_write`, `delegate_executor`, verify, synthèse.
-`role_executor` — mutations dans `scope` ; statut `completed` / `partial` / `failed`.
-`delegate_executor` — sous-run sync ; sorties `.drox/agent-output/<plan>/<task>/`.
-`architect_gates` — pas de compensation échec ; scope validé.
-`architect_help` — tool rappel protocole.
-`role_enter` — event `RoleEnter` ; `agent/done` fin cycle.
+---
 
-___
-
-<a id="fr-2026-05-v13"></a>
-
-### 2026-05 — `v1_3`
-
-`failure_absorption` — truth check post-délégation, `FailurePacket`.
-`parallel_batch` — `parallel_with[]`, réponse `{ results: [...] }`.
-`scope_disjoint_gate` — refus batch si chemins qui se chevauchent.
-`retry_per_task` — re-délégation ciblée après échec partiel.
-`architect_todo_guidance` — anti-boucle clôture plan.
-
-___
-
-<a id="en"></a>
-
-# Drox Engine
-
-Rust binary (`drox-engine/drox/`) that runs a local LLM + tools loop. The client (IDE) starts `drox --serve`, reads NDJSON on stdio, and runs what cannot live in the engine (LSP, diff, UI prompts). Inference via Ollama or compatible API. KDDS product — no mandated proprietary cloud.
-
-___
-
-<a id="en-invariants"></a>
-
-## Invariants
-
-`moteur_seul` — phases, gates, orchestration, and tool registry live in Rust; the client does not own the agent protocol.
-`done_obligatoire` — run ends only on `[phase: done]`; no “no more tools so we stop”.
-`answering_avant_done` — `done` blocked or nudged if `answering` was not seen in the run.
-`phases_marqueurs` — model announces `analyzing`, `reading`, `acting`, `testing`, `answering`, etc.; only text under `answering` is the user-facing reply.
-`architecte_pas_executant` — architect role: plan + delegate; no glob/grep/file_read to bail out a failed executor (gates).
-`brief_delegate` — every `delegate_executor` carries instructions, deliverable, `scope`; no empty title.
-`rapport_synthese` — architect gets a summarized executor report, not the full sub-run transcript.
-`roles_pas_tiers` — Low/Medium tiers dropped; replaced by separate architect / executor models and registries.
-`batch_parallel_with` — multiple executor tasks in one call; disjoint scopes; cap `maxParallelExecutors`.
-
-___
-
-<a id="en-timeline"></a>
-
-## Timeline
-
-<a id="en-2025-12"></a>
-
-### 2025-12 — bootstrap
-
-`drox_cli` — `drox` binary.
-`serve_stdio` — `drox --serve` mode, JSON-RPC NDJSON.
-`rpc_base` — `initialize`, `agent.run`, `agent.cancel`, `session.list`, `session.read`, `session.compact`, `shutdown`.
-`rpc_client` — `tool/exec`, `user/ask` (server → client).
-`agent_loop` — LLM turns, `tool_calls`, `agent/event` stream, JSONL transcript.
-`drox_llm` — Ollama client, stream, retry, tool calls, resume on `MaxTokens`.
-`tools_fichiers` — `file_read`, `file_write`, `file_edit`, `grep`, `glob`, `bash`, `web_fetch`.
-`plan_mode` — `plan_mode`, `exit_plan_mode`, `ask_user_question`.
-`drox_permissions` — allow / ask / deny, permission modes.
-`drox_session` — sessions, transcript, `MEMORY.md`, `DROX.md`.
-`drox_context` — token counting, `tool_result` snip.
-`session_compact_rpc` — manual compaction `session.compact` / `summarize_run`.
-`mcp_stubs` — `drox-mcp`, `mcp__*` tools.
-
-___
-
-<a id="en-2026-02"></a>
-
-### 2026-02
-
-`multimodal` — user images → `Content::Image`, Ollama `images` field.
-`web_search` — DuckDuckGo HTML search, read-only.
-`lsp_remote` — `lsp` tool; IDE-side execution.
-`ollama_defaults` — `num_ctx`, `num_predict`, sampling, top-level `keep_alive`.
-
-___
-
-<a id="en-2026-02-end"></a>
-
-### 2026-02-end
-
-`todo_write` — `{ id, content, status }` list.
-`phase_protocol` — `[phase: …]`, `PhaseEnter`, inference, aliases.
-`nudge_tour_vide` — nudge on turn with no tool and no `done`.
-`gate_todo_ouverte` — `done` blocked while pending/in_progress.
-`glob_dirs` — `glob` returns files and directories.
-`loop_detector` — two identical turns → `LoopDetected`.
-`todo_recreation_block` — second plan forbidden after 100 % completed plan.
-`memory_sessions` — `.drox/memory/sessions/*.md`, `memory_read`, `memory_list`, `session_note`, `MemoryPersisted`.
-`compaction_live_v1` — microcompact, bounded tail, `compact_until_budget`, snip/compact events.
-`paste_inject` — `[Smart paste]` block in prompt (client-side).
-`user_ask` — multi `ask_user_question` + RPC `user/ask`.
-`msg_queue` — message queue during run (client).
-`ctx_policy_num_ctx` — autocompact tied to real Ollama context window.
-
-___
-
-<a id="en-2026-03"></a>
-
-### 2026-03
-
-`long_memory_v1` — compaction index, `session_search`, `/session_end` → `session_closure` (no LLM `session_end` tool).
-`compaction_live_v2` — loop until context budget.
-`hooks_json` — `.drox/hooks.json`, Pre/Post tool shell.
-`parallel_read_tools` — concurrency-safe reads, `max_parallel_tool_calls`.
-`bash_classifier` — bash segments auto-allow / auto-deny.
-`file_rules` — path permissions, `settings.local.json`.
-`copy_path`, `delete_path` — dedicated tools.
-`notebook_edit` — ipynb cells replace/insert/delete.
-
-___
-
-<a id="en-2026-04"></a>
-
-### 2026-04
-
-`skills` — `.drox/skills/`, `skill_read`, `skill_list`.
-`git_worktree` — `git_worktree_enter`, `git_worktree_exit`.
-`mcp_hub` — MCP registry, resources, `mcp_call` fallback.
-`professor_mode` — `course_plan_write`, gates, `.drox/course-cycles/`.
-`tools_toggle` — `drox.tools.disabled`, MCP on/off.
-`phase_analyzing` — phase + exploration nudge.
-`phase_testing` — `done` gate after code mutation.
-`workspace_map` — `.drox/workspace-map.json`, read/note, post-tool mirror.
-`droxignore` — paths excluded from agent.
-`run_objective` — locked objective, `scope_defer`.
-`subagent_task` — `task` Explore tool, off by default.
-`image_paths_prompt` — image paths in prompt.
-`agent_split` — `agent/` modules (gates, phases, nudges, stream).
-`run_policy` — `RunPolicy` layer (transitional, before tier drop).
-`tiers_low_medium_abandon` — April experiment, removed for `v1_2`.
-
-___
-
-<a id="en-2026-05-v12"></a>
-
-### 2026-05 — `v1_2`
-
-`orchestration_v1_2` — `DROX_ORCHESTRATION=v1_2` replaces `legacy` mono-agent.
-`run_spec` — role, limits, tool registry per `RunSpec`.
-`role_architect` — `workspace_map_read`, `todo_write`, `delegate_executor`, verify, synthesis.
-`role_executor` — mutations within `scope`; status `completed` / `partial` / `failed`.
-`delegate_executor` — sync sub-run; output under `.drox/agent-output/<plan>/<task>/`.
-`architect_gates` — no failure compensation; validated scope.
-`architect_help` — protocol reminder tool.
-`role_enter` — `RoleEnter` event; `agent/done` end of cycle.
-
-___
-
-<a id="en-2026-05-v13"></a>
-
-### 2026-05 — `v1_3`
-
-`failure_absorption` — post-delegation truth check, `FailurePacket`.
-`parallel_batch` — `parallel_with[]`, response `{ results: [...] }`.
-`scope_disjoint_gate` — batch rejected if paths overlap.
-`retry_per_task` — targeted re-delegation after partial failure.
-`architect_todo_guidance` — anti-loop plan closure.
+*KDDS — Drox IDE. Built on Code OSS. Engine & branding proprietary.*
