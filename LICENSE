@@ -1,0 +1,70 @@
+Proprietary Software License — Drox IDE
+Licence logicielle propriétaire — Drox IDE
+
+Copyright (c) 2025–2026 KDDS. All Rights Reserved.
+Copyright (c) 2025–2026 KDDS. Tous droits réservés.
+
+================================================================================
+
+ENGLISH
+
+This repository and the Drox IDE software distributed from it (including
+installers, binaries, release manifests, documentation, and metadata) are
+proprietary and confidential works owned by KDDS.
+
+No part of this software may be used, copied, modified, merged, published,
+distributed, sublicensed, sold, or otherwise made available, in whole or in
+part, except as expressly permitted in writing by KDDS or under a separate
+end-user license agreement.
+
+You may download and install the software solely for your personal or internal
+business use, subject to any additional terms presented at installation or
+download. Reverse engineering, decompilation, disassembly, or any attempt to
+derive source code is prohibited except to the extent such restriction is
+prohibited by applicable law.
+
+Third-party open-source components included in Drox IDE remain subject to their
+respective licenses. See NOTICE.md and ThirdPartyNotices.txt in the installation
+directory.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL KDDS BE LIABLE
+FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE
+OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+For licensing inquiries: https://github.com/DroxKiwi
+
+================================================================================
+
+FRANÇAIS
+
+Ce dépôt et le logiciel Drox IDE qui y est distribué (installeurs, binaires,
+manifests de version, documentation et métadonnées) constituent des œuvres
+propriétaires et confidentielles appartenant à KDDS.
+
+Aucune partie de ce logiciel ne peut être utilisée, copiée, modifiée, fusionnée,
+publiée, distribuée, sous-licenciée, vendue ou mise à disposition, en tout ou
+partie, sauf autorisation écrite expresse de KDDS ou dans le cadre d’un contrat
+de licence utilisateur distinct.
+
+Vous pouvez télécharger et installer le logiciel uniquement pour un usage
+personnel ou interne à votre organisation, sous réserve des conditions
+supplémentaires présentées lors du téléchargement ou de l’installation. La
+rétro-ingénierie, la décompilation, le désassemblage ou toute tentative
+d’extraction du code source sont interdits, sauf dans la mesure où une telle
+restriction est interdite par la loi applicable.
+
+Les composants open source tiers inclus dans Drox IDE restent soumis à leurs
+licences respectives. Voir NOTICE.md et ThirdPartyNotices.txt dans le répertoire
+d’installation.
+
+LE LOGICIEL EST FOURNI « EN L’ÉTAT », SANS GARANTIE D’AUCUNE SORTE, EXPRESSE OU
+IMPLICITE, Y COMPRIS, SANS S’Y LIMITER, LES GARANTIES DE QUALITÉ MARCHANDE,
+D’ADÉQUATION À UN USAGE PARTICULIER ET D’ABSENCE DE CONTREFAÇON. EN AUCUN CAS
+KDDS NE POURRA ÊTRE TENUE RESPONSABLE DE TOUT DOMMAGE, RÉCLAMATION OU AUTRE
+RESPONSABILITÉ, CONTRACTUELLE, DÉLICTUELLE OU AUTRE, DÉCOULANT DU LOGICIEL OU
+DE SON UTILISATION.
+
+Pour toute demande de licence : https://github.com/DroxKiwi

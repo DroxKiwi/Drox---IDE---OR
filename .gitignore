@@ -1,0 +1,7 @@
+# Binaires : publier via GitHub Releases (gh release create), pas via git.
+*.exe
+*.zip
+*.msi
+dist/
+_upload/
+note_for_deployment.md
