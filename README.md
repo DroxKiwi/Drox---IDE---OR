@@ -1,129 +1,418 @@
 # Drox IDE — releases officielles
 
-**Ce dépôt** : binaires Windows, manifestes de mise à jour (`stable/latest.json`), notes de version.  
-**Pas les sources** — produit propriétaire [KDDS](https://github.com/DroxKiwi). Socle Code OSS (MIT) + moteur Drox — voir [NOTICE.md](NOTICE.md).
+**Ce dépôt** : binaires Windows, manifestes MAJ (`stable/latest.json`), notes de version.  
+**Pas les sources** — moteur & branding propriétaires [KDDS](https://github.com/DroxKiwi). Socle IDE : Code OSS (MIT) — [NOTICE.md](NOTICE.md).
 
 **Dernière version** : [1.3.2](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest)
 
----
-
-## FR
-
-### C’est quoi, Drox IDE ?
-
-Un IDE pour coder **avec un agent local** — pas un wrapper Copilot, pas un SaaS qui aspire ton repo. Tu installes, tu branches **Ollama** (ou une API compatible), tu parles à **Drox Chat**. Point.
-
-L’app embarque le binaire **`drox`** (moteur Rust). Pas de compte KDDS obligatoire. Pas de télémétrie Microsoft dans le package. Les MAJ passent par ce repo (`latest.json` + Releases GitHub).
-
-### Le moteur Drox — ce qu’il sait faire (sans spoiler le code)
-
-Le moteur, c’est le cerveau **hors du navigateur** : boucle LLM ↔ outils, en local. L’IDE ne fait que l’UI, le LSP, les diffs et les trucs qu’un binaire ne peut pas faire seul dans ton workspace.
-
-**Deux têtes, un patron**
-
-- **Architecte** — comprend la demande, pose un plan (`todo_write`), découpe le boulot, **délègue** au lieu de tout mâcher dans un seul fil de chat.
-- **Exécuteurs** — agents courts, **périmètre verrouillé** (un scope = pas de vadrouille dans tout le monorepo). Plusieurs tâches **en parallèle** si les scopes ne se marchent pas dessus.
-
-**Modes**
-
-- **Discussion** — salut, avis, explication : réponse directe, pas de circus d’outils.
-- **Édition** — tu veux du concret : lecture workspace, grep, patches, commandes, livrables dans `.drox/agent-output/`.
-
-**Outils (côté utilisateur, pas côté rust)**
-
-- Fichiers : lire, écrire, éditer, chercher (`grep` / `glob`).
-- Terminal contrôlé (`bash`), fetch web en lecture.
-- **LSP** (définitions, refs, diagnostics) — exécuté par l’IDE, résultat renvoyé au moteur.
-- Plan / todos, questions utilisateur (oui/non, choix multiples).
-- **Sessions** persistantes, historique, compaction quand ça grossit.
-- Mémoire projet (fichiers `.drox/`, notes de session) pour ne pas repartir de zéro à chaque run.
-
-**Garde-fous (le truc qui évite les runs pourris)**
-
-- Pas de « j’ai fini » tant qu’il reste des todos ouverts.
-- Pas de délégation sans plan.
-- Pas de scope exécuteur flou du type « refacto tout le projet ».
-- Si un exécuteur plante : rapport d’échec structuré, retry ciblé — pas un dump de 400 messages dans ton chat.
-
-**Ce que ce n’est pas (encore)**
-
-- Pas d’index sémantique / RAG maison au niveau 1.3.2 (prévu 1.3.3).
-- Pas de cloud KDDS imposé — ton LLM, ta machine.
-- Pas open source : on décrit les **capacités**, pas la recette.
-
-### Installer / mettre à jour
-
-1. [Releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases) → `Drox-IDE-Setup-*-win32-x64.exe`
-2. **Ollama** recommandé : [ollama.com](https://ollama.com/)
-3. L’IDE vérifie `stable/latest.json` au démarrage ; notif si une version plus récente est publiée ici.
-
-### Liens
-
 | | |
 |---|---|
-| Licence & attributions | [NOTICE.md](NOTICE.md) |
-| Notes 1.3.2 | [stable/1.3.2/RELEASE_NOTES.md](stable/1.3.2/RELEASE_NOTES.md) |
-| Issues (install, MAJ) | [Issues](https://github.com/DroxKiwi/Drox---IDE---OR/issues) |
+| Installer | [Releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) |
+| MAJ auto | `stable/latest.json` (lu au démarrage de l’IDE) |
+| Ollama (recommandé) | [ollama.com](https://ollama.com/) |
 
 ---
 
-## EN
+## FR — Drox IDE en deux lignes
 
-### What is Drox IDE?
+IDE local + agent embarqué. Pas de cloud KDDS imposé, pas de télémétrie MS dans le package. Tu branches ton LLM (Ollama ou API compatible), tu bosses dans **Drox Chat**.
 
-An IDE built around a **local coding agent** — not a Copilot skin, not a SaaS vacuuming your repo. Install, point **Ollama** (or a compatible API) at it, use **Drox Chat**. Done.
+---
 
-The app ships the **`drox`** engine (Rust). No mandatory KDDS account. No Microsoft telemetry in the package. Updates are served from this repo (`latest.json` + GitHub Releases).
+## FR — Architecture : qui fait quoi
 
-### The Drox engine — what it can do (no implementation spoilers)
+Le produit = **deux processus** qui ne se mélangent pas :
 
-The engine is the **brain outside the webview**: LLM ↔ tools loop, on your machine. The IDE handles UI, LSP, diffs, and anything a standalone binary cannot safely do in your workspace.
+```mermaid
+flowchart LR
+  subgraph IDE["Drox IDE (Electron)"]
+    UI["Drox Chat webview"]
+    HOST["Hôte workbench"]
+    LSP["LSP / diffs / permissions UI"]
+  end
 
-**Two roles, one boss**
+  subgraph ENG["Moteur drox.exe (Rust)"]
+    LOOP["Boucle agent LLM ↔ outils"]
+    SESS["Sessions & transcript"]
+    GATES["Garde-fous d'exécution"]
+  end
 
-- **Architect** — understands the ask, builds a plan (`todo_write`), splits work, **delegates** instead of rambling in one endless chat thread.
-- **Executors** — short-lived agents with a **locked scope** (one scope = no wandering across the whole monorepo). Multiple tasks **in parallel** when scopes do not overlap.
+  subgraph EXT["Externe"]
+    OLL["Ollama / API compatible"]
+    FS["Workspace + .drox/"]
+  end
 
-**Modes**
+  UI <-->|messages UI| HOST
+  HOST <-->|JSON-RPC NDJSON stdio| LOOP
+  LOOP <-->|inférence stream| OLL
+  LOOP --> SESS
+  LOOP --> GATES
+  HOST -->|tool/exec, user/ask| LSP
+  LOOP --> FS
+  HOST --> FS
+```
 
-- **Discuss** — hi, opinions, explanations: direct answer, no tool circus.
-- **Edit** — you want real work: workspace reads, grep, patches, commands, deliverables under `.drox/agent-output/`.
+| Composant | Responsabilité réelle |
+|-----------|----------------------|
+| **Moteur `drox`** | Décide du protocole agent : tours LLM, appels d’outils, orchestration architecte/exécuteur, gates, persistance session. **Le client ne pilote pas la logique agent.** |
+| **IDE** | UI chat, lance `drox --serve`, exécute les outils « client » (LSP, écriture fichier avec diff, questions bloquantes), affiche le stream (Thinking / réponse / travail). |
+| **Ollama** | Inférence locale (ou autre endpoint OpenAI-compatible). Le moteur envoie prompts + tool schemas ; reçoit tokens + tool_calls. |
+| **`.drox/`** | Sessions, transcripts, mémoire, sorties agent — sur **ton disque**, pas chez nous. |
 
-**Tools (user-facing)**
+Connexion IDE ↔ moteur : **une pipe stdio**, messages **NDJSON** (une requête/réponse ou un event par ligne). Pas de serveur web entre les deux.
 
-- Files: read, write, edit, search (`grep` / `glob`).
-- Controlled shell (`bash`), read-only web fetch.
-- **LSP** (definitions, references, diagnostics) — run by the IDE, results fed back to the engine.
-- Plan / todos, user questions (yes/no, multiple choice).
-- **Persistent sessions**, history, compaction when context gets fat.
-- Project memory (`.drox/` files, session notes) so every run does not start from zero.
+---
 
-**Guardrails (the stuff that stops garbage runs)**
+## FR — Un message utilisateur → un run
 
-- No “I’m done” while todos are still open.
-- No delegation without a plan.
-- No vague executor scope like “refactor the entire project”.
-- Executor failure → structured failure report, targeted retry — not a 400-message transcript dump in your chat.
+Chaque envoi dans le chat déclenche un **`agent.run`** côté moteur. Avant la boucle lourde, **routage léger** :
 
-**What it is not (yet)**
+```mermaid
+flowchart TD
+  MSG["Message utilisateur"] --> RUN["agent.run"]
+  RUN --> MODE{"Mode demandé ?"}
+  MODE -->|discuss| DISC["Run DISCUSSION"]
+  MODE -->|edit| EDIT["Run ÉDITION"]
+  MODE -->|auto| HEUR["Heuristique légère"]
+  HEUR -->|salut / avis / question courte| DISC
+  HEUR -->|travail code / fichiers| EDIT
 
-- No home-grown semantic index / RAG at 1.3.2 level (planned 1.3.3).
-- No forced KDDS cloud — your LLM, your machine.
-- Not open source: we describe **capabilities**, not the recipe.
+  DISC --> DLOOP["Boucle architecte discussion"]
+  DLOOP --> DOUT["Réponse directe — peu ou pas d'outils"]
 
-### Install / update
+  EDIT --> EBOOT["Boot : objectif + snapshot workspace"]
+  EBOOT --> ELOOP["Boucle architecte édition"]
+  ELOOP --> TOOLS["Outils + délégations"]
+  TOOLS --> DONE{"[phase: done] validé ?"}
+  DONE -->|oui| END["Fin run"]
+  DONE -->|non| ELOOP
+```
 
-1. [Releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases) → `Drox-IDE-Setup-*-win32-x64.exe`
-2. **Ollama** recommended: [ollama.com](https://ollama.com/)
-3. The IDE checks `stable/latest.json` on startup; you get a notification when a newer release is published here.
+**Discussion** — tu veux parler : réponse en prose, budget lecture limité, pas de circus `delegate_executor`.  
+**Édition** — tu veux du concret : plan, todos, grep, patches, sous-agents, livrables.
 
-### Links
+> **1.3.2** : plus de chaîne de « gates » LLM avant le run (anciens probes JSON). Le routage est **direct** — moins de bruit, plus prévisible.
 
-| | |
-|---|---|
-| License & attributions | [NOTICE.md](NOTICE.md) |
-| 1.3.2 notes | [stable/1.3.2/RELEASE_NOTES.md](stable/1.3.2/RELEASE_NOTES.md) |
-| Issues (install, updates) | [Issues](https://github.com/DroxKiwi/Drox---IDE---OR/issues) |
+---
+
+## FR — Boucle d’un run édition (architecte)
+
+C’est le cœur du moteur. Tour par tour :
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant U as Utilisateur
+  participant IDE as IDE
+  participant M as Moteur
+  participant L as LLM
+
+  U->>IDE: message
+  IDE->>M: agent.run
+  M->>M: boot prompt + snapshot factuel
+  loop Chaque tour architecte
+    M->>L: messages + allowlist outils
+    L-->>M: texte + éventuels tool_calls
+    M->>M: tool gates (autorisé ?)
+    alt outil client (lsp, etc.)
+      M->>IDE: tool/exec
+      IDE-->>M: résultat
+    else outil moteur (grep, read…)
+      M->>M: exécution locale
+    end
+    M->>IDE: events stream (phase, tool, delta…)
+  end
+  M->>IDE: agent/done
+```
+
+**Allowlist par tour (architecte)** — le modèle ne voit qu’un **sous-ensemble** d’outils à chaque tour (ordre de grandeur : ~6 types). Ça évite le buffet « 40 tools » qui part en vrille.
+
+**Phases** — le modèle annonce où il en est (`reading`, `acting`, `answering`…). Seul le texte sous **`answering`** est la réponse utilisateur ; le reste alimente le panneau **Thinking** (raisonnement visible mais pas mélangé au chat).
+
+---
+
+## FR — Délégation : architecte ≠ exécuteur
+
+L’architecte **ne fouille pas le repo à la place** des sous-agents. Il planifie, puis appelle **`delegate_executor`** :
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant ARC as Architecte
+  participant DEL as delegate_executor
+  participant E1 as Exécuteur 1
+  participant E2 as Exécuteur N
+  participant IDE as IDE
+
+  Note over ARC: todo_write avant délégation (gate)
+  ARC->>DEL: tâche(s) + scope + livrable attendu
+  DEL->>DEL: vérif scopes disjoints
+
+  par Parallèle si slots libres
+    DEL->>E1: sous-run bloquant
+    loop Tours exécuteur
+      E1->>IDE: outils (grep, write, bash…)
+      IDE-->>E1: résultats
+    end
+    E1->>E1: fichier .drox/agent-output/…
+  and
+    DEL->>E2: autre scope
+    E2->>E2: idem
+  end
+
+  DEL->>DEL: truth_check + FailurePacket si échec
+  DEL-->>ARC: rapport synthèse (pas le transcript intégral)
+  opt échec partiel
+    ARC->>DEL: retry une tâche ciblée
+  end
+```
+
+| Règle interne | Pourquoi ça te concerne |
+|---------------|-------------------------|
+| **Scope verrouillé** | Un exécuteur = un périmètre fichiers/dossiers. Pas de « refacto tout le repo » en une délégation. |
+| **Allowlist exécuteur plus stricte** (~2 outils/tour) | Moins de dérives, run plus court. |
+| **Rapport synthèse** | Ton chat architecte reste lisible — pas 300 messages d’un sous-agent.recyclés. |
+| **Batch parallèle** | Plusieurs tâches **si** les scopes ne se chevauchent pas et que le réglage parallèle le permet. |
+| **FailurePacket** | Échec = diagnostic structuré, pas un silence ou un mensonge « c’est bon ». |
+
+---
+
+## FR — Garde-fous (tool gates)
+
+Ce ne sont **pas** des « gates LLM » de discussion — ce sont des **bloqueurs d’exécution** dans la boucle :
+
+| Gate | Effet |
+|------|--------|
+| `todo_write` avant `delegate_executor` | Pas de sous-agent lancé sans plan. |
+| `workspace_map_read` (selon preset) | L’architecte a une carte du repo avant de déléguer à l’aveugle. |
+| `[phase: done]` + todos ouverts | Refus de clôturer tant qu’il reste du travail déclaré. |
+| Cap lectures / mutations | Nudge vers délégation au lieu de tout lire seul. |
+| Scope disjoint | Impossible de lancer deux exécuteurs sur les mêmes fichiers en parallèle. |
+| Anti-boucle | Deux tours identiques → arrêt / relance. |
+
+Les **presets** (`relaxed` / `normal` / `strict`) modulent la sévérité — sans changer l’architecture.
+
+---
+
+## FR — Persistance session
+
+```mermaid
+flowchart TB
+  subgraph DISK[".drox/ (workspace)"]
+    TR["transcript JSONL par session"]
+    UIJ["journal UI replay (affichage chat)"]
+    OUT["agent-output/ rapports exécuteurs"]
+    MEM["memory/ notes & MEMORY.md"]
+    SESS["métadonnées session"]
+  end
+
+  MOTEUR["Moteur"] --> TR
+  IDE["IDE"] --> UIJ
+  EXE["Exécuteurs"] --> OUT
+  MOTEUR --> MEM
+```
+
+- **Transcript** = vérité complète du run (export, revert, debug).  
+- **UI replay** = ce que le chat réaffiche (en 1.3.2 : chargement **tail-first** + scroll pour l’historique).  
+- **Compaction** = quand le contexte grossit, le moteur résume / snip pour tenir dans la fenêtre LLM.
+
+---
+
+## FR — Ce que le moteur n’est pas (1.3.2)
+
+| Pas encore | Prévu |
+|------------|--------|
+| Index sémantique / RAG local maison | 1.3.3 |
+| Graphe de contexte auto-injecté au boot | 1.3.3 |
+| Fast path complétion &lt;100 ms | 1.3.3 |
+| Code source ouvert | — |
+
+On documente l’**architecture et le comportement**, pas les prompts internes ni le code Rust.
+
+---
+
+## EN — Drox IDE in two lines
+
+Local IDE + embedded agent. No forced KDDS cloud, no MS telemetry in the package. Point your LLM (Ollama or compatible API) at it, work in **Drox Chat**.
+
+---
+
+## EN — Architecture: who does what
+
+The product is **two processes**:
+
+```mermaid
+flowchart LR
+  subgraph IDE["Drox IDE (Electron)"]
+    UI["Drox Chat webview"]
+    HOST["Workbench host"]
+    LSP["LSP / diffs / UI permissions"]
+  end
+
+  subgraph ENG["Engine drox.exe (Rust)"]
+    LOOP["Agent loop LLM ↔ tools"]
+    SESS["Sessions & transcript"]
+    GATES["Execution guardrails"]
+  end
+
+  subgraph EXT["External"]
+    OLL["Ollama / compatible API"]
+    FS["Workspace + .drox/"]
+  end
+
+  UI <-->|UI messages| HOST
+  HOST <-->|JSON-RPC NDJSON stdio| LOOP
+  LOOP <-->|stream inference| OLL
+  LOOP --> SESS
+  LOOP --> GATES
+  HOST -->|tool/exec, user/ask| LSP
+  LOOP --> FS
+  HOST --> FS
+```
+
+| Component | Actual responsibility |
+|-----------|----------------------|
+| **`drox` engine** | Owns the agent protocol: LLM turns, tool calls, architect/executor orchestration, gates, session persistence. **The client does not drive agent logic.** |
+| **IDE** | Chat UI, spawns `drox --serve`, runs “client” tools (LSP, file writes with diff, blocking user questions), renders the stream (Thinking / answer / work). |
+| **Ollama** | Local inference (or other OpenAI-compatible endpoint). Engine sends prompts + tool schemas; receives tokens + tool_calls. |
+| **`.drox/`** | Sessions, transcripts, memory, agent outputs — on **your disk**, not ours. |
+
+IDE ↔ engine: **stdio pipe**, **NDJSON** messages (one request/response or event per line).
+
+---
+
+## EN — One user message → one run
+
+Each chat send triggers an **`agent.run`** on the engine. Light routing first:
+
+```mermaid
+flowchart TD
+  MSG["User message"] --> RUN["agent.run"]
+  RUN --> MODE{"Requested mode?"}
+  MODE -->|discuss| DISC["DISCUSSION run"]
+  MODE -->|edit| EDIT["EDIT run"]
+  MODE -->|auto| HEUR["Light heuristic"]
+  HEUR -->|hi / opinion / short question| DISC
+  HEUR -->|code / files work| EDIT
+
+  DISC --> DLOOP["Discussion architect loop"]
+  DLOOP --> DOUT["Direct reply — few or no tools"]
+
+  EDIT --> EBOOT["Boot: goal + workspace snapshot"]
+  EBOOT --> ELOOP["Edit architect loop"]
+  ELOOP --> TOOLS["Tools + delegations"]
+  TOOLS --> DONE{"[phase: done] valid?"}
+  DONE -->|yes| END["Run end"]
+  DONE -->|no| ELOOP
+```
+
+**1.3.2**: no pre-run LLM “gate chain” (old JSON probes). Routing is **direct** — less noise, more predictable.
+
+---
+
+## EN — Edit run loop (architect)
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant U as User
+  participant IDE as IDE
+  participant M as Engine
+  participant L as LLM
+
+  U->>IDE: message
+  IDE->>M: agent.run
+  M->>M: boot prompt + factual snapshot
+  loop Each architect turn
+    M->>L: messages + tool allowlist
+    L-->>M: text + optional tool_calls
+    M->>M: tool gates (allowed?)
+    alt client tool (lsp, etc.)
+      M->>IDE: tool/exec
+      IDE-->>M: result
+    else engine tool (grep, read…)
+      M->>M: local execution
+    end
+    M->>IDE: stream events (phase, tool, delta…)
+  end
+  M->>IDE: agent/done
+```
+
+**Per-turn allowlist (architect)** — the model only sees a **subset** of tools each turn (~6 types).  
+**Phases** — model announces state (`reading`, `acting`, `answering`…). Only **`answering`** text is the user reply; the rest feeds **Thinking**.
+
+---
+
+## EN — Delegation: architect ≠ executor
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant ARC as Architect
+  participant DEL as delegate_executor
+  participant E1 as Executor 1
+  participant E2 as Executor N
+  participant IDE as IDE
+
+  Note over ARC: todo_write before delegate (gate)
+  ARC->>DEL: task(s) + scope + expected deliverable
+  DEL->>DEL: disjoint scope check
+
+  par Parallel when slots free
+    DEL->>E1: blocking sub-run
+    loop Executor turns
+      E1->>IDE: tools (grep, write, bash…)
+      IDE-->>E1: results
+    end
+    E1->>E1: .drox/agent-output/… file
+  and
+    DEL->>E2: other scope
+    E2->>E2: same
+  end
+
+  DEL->>DEL: truth_check + FailurePacket on failure
+  DEL-->>ARC: synthesis report (not full transcript)
+  opt partial failure
+    ARC->>DEL: retry single task
+  end
+```
+
+---
+
+## EN — Guardrails (tool gates)
+
+| Gate | Effect |
+|------|--------|
+| `todo_write` before `delegate_executor` | No sub-agent without a plan. |
+| `workspace_map_read` (preset-dependent) | Repo map before blind delegation. |
+| `[phase: done]` + open todos | Refuse close while work is still declared. |
+| Read / mutation caps | Nudge toward delegation instead of solo exhaustive reads. |
+| Disjoint scope | No parallel executors on overlapping files. |
+| Anti-loop | Identical turns → stop / retry. |
+
+Presets (`relaxed` / `normal` / `strict`) tune severity — same architecture.
+
+---
+
+## EN — Session persistence
+
+Same layout as FR diagram: `.drox/` holds JSONL transcript (source of truth), UI replay journal, `agent-output/`, memory files. Compaction kicks in when context grows.
+
+---
+
+## EN — What the engine is not (1.3.2)
+
+No home-grown semantic index/RAG yet (1.3.3). No open source. We document **architecture and behavior**, not internal prompts or Rust implementation.
+
+---
+
+## Liens / Links
+
+| FR | EN |
+|----|-----|
+| [NOTICE.md](NOTICE.md) | License & attributions |
+| [stable/1.3.2/RELEASE_NOTES.md](stable/1.3.2/RELEASE_NOTES.md) | Release notes |
+| [Issues](https://github.com/DroxKiwi/Drox---IDE---OR/issues) | Install & update issues |
 
 ---
 
