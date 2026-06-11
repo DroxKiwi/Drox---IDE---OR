@@ -1,9 +1,15 @@
 # Drox IDE — releases officielles
 
+## ⚠️ STATUT — version 1.4.0 (juin 2026)
+
+> **Cette release embarque la refonte moteur 1.4.0 (run rail). Le produit reste en phase de stabilisation et n’est pas utilisable en production** pour un travail agent quotidien. Usage **dogfood / développement** uniquement. Correctifs prévus en **1.4.1**.
+
+---
+
 **Ce dépôt** : binaires Windows, manifestes MAJ (`stable/latest.json`), notes de version.  
 **Pas les sources** — moteur & branding propriétaires [KDDS](https://github.com/DroxKiwi). Socle IDE : Code OSS (MIT) — [NOTICE.md](NOTICE.md).
 
-**Dernière version** : [1.3.2](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest)
+**Dernière version** : [1.4.0](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) · notes [RELEASE_NOTES](stable/1.4.0/RELEASE_NOTES.md)
 
 | | |
 |---|---|
