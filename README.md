@@ -69,7 +69,7 @@ flowchart TB
 | **Ollama** | Inférence locale — le modèle que **tu** choisis |
 | **drox.exe** | Boucle agent, run rail, permissions, session |
 | **Drox IDE** | Éditeur + chat + exécution LSP/diff dans le workspace |
-| **Toi** | Repo, modèle, mode permission (default / plan / acceptEdits…) |
+| **Toi** | Repo, modèle, mode permission (`analyze` / `trust edit` / `I'm not crazy`) |
 
 Pas de compte cloud KDDS obligatoire. Données session dans **`.drox/`** sur ton disque.
 
@@ -116,7 +116,7 @@ flowchart LR
 
 | Composant | Responsabilité réelle |
 |-----------|----------------------|
-| **Moteur `drox`** | Protocole agent : tours LLM, **run rail** (stations edit), filtre outils, gates, session. **L’IDE ne pilote pas la logique agent.** |
+| **Moteur `drox`** | Protocole agent : tours LLM, **run rail** (stations edit), **tool folders**, gates, session. **L’IDE ne pilote pas la logique agent.** |
 | **IDE** | UI chat, lance `drox --serve`, exécute les outils « client » (LSP, diff, questions bloquantes), affiche le stream (Thinking / réponse / travail). |
 | **Ollama** | Inférence locale (ou endpoint OpenAI-compatible). Le moteur envoie prompts + tool schemas ; reçoit tokens + tool_calls. |
 | **`.drox/`** | Sessions, transcripts, mémoire — sur **ton disque**, pas chez nous. |
@@ -127,45 +127,55 @@ Connexion IDE ↔ moteur : **une pipe stdio**, messages **NDJSON** (une requête
 
 ## FR — Un message utilisateur → un run
 
-Chaque envoi déclenche **`agent.run`**. Deux chemins :
+Chaque envoi déclenche **`agent.run`**. Le moteur route ensuite vers **discussion** ou **édition rail** :
 
 ```mermaid
 flowchart TD
   MSG["Message utilisateur"] --> RUN["agent.run"]
-  RUN --> MODE{"Mode ?"}
-  MODE -->|discuss| DISC["ArchitectDiscussion"]
-  MODE -->|edit| EDIT["Architect + run rail"]
+  RUN --> MODE{"Mode architecte (vignettes)"}
+  MODE -->|Auto| PROBE["Intent probe — tour LLM court sans outils"]
+  PROBE --> ROUTE{Intent JSON}
+  ROUTE -->|salut / Q&A simple| DISC
+  ROUTE -->|travail sur le repo| EDIT
+  MODE -->|Discussion| DISC["Discuss — reads limités, pas de rail"]
+  MODE -->|Action| EDIT["Edit — architecte solo + run rail"]
 
-  DISC --> DOUT["Réponse courte — peu ou pas d'outils"]
+  DISC --> DOUT["[discussion: reply] puis [discussion: done]"]
 
-  EDIT --> RAIL["Stations : intent read plan act verify answer"]
+  EDIT --> RAIL["INTENT → READ → PROPOSE? → PLAN → ACT → VERIFY → ANSWER"]
   RAIL --> DONE{"[phase: done] ?"}
   DONE -->|oui| END["Fin run"]
   DONE -->|non| RAIL
 ```
 
-**Discuss** — parler, avis, question : réponse directe, pas de rail complet.  
-**Edit** — travail sur le code : un seul agent, **run rail**, mutations inline (plus de sous-agents exécuteur).
+**Auto** — le moteur lance un **intent probe** (petit tour LLM au boot) pour choisir discuss vs edit.  
+**Discussion** — réflexion / question : outils lecture seule possibles, **pas** de run rail ni `todo_write` / mutations.  
+**Action** — travail sur le code : **un seul** architecte, **run rail** complet, mutations inline (**plus** de sous-agent `delegate_executor`).
 
-Le mode vient des réglages chat (`discuss` / `edit` / `auto`) et du routage moteur — pas d’ancienne chaîne de probes LLM avant le run.
+Les vignettes chat (`Auto` / `Discussion` / `Action`) correspondent à `drox.architect.interactionMode`.
 
 ---
 
 ## FR — Run rail (édition)
 
-Depuis la **1.4.0**, l’édition suit des **stations**. Le moteur filtre les outils visibles **par station** avant chaque tour LLM.
+Depuis la **1.4.0** (renforcé en **1.4.1**), l’édition suit **7 stations** linéaires. Le moteur filtre les outils visibles **par station** avant chaque tour LLM. Certaines capacités sont regroupées en **dossiers outils** (`read_workspace`, `edit_file`, `verify_project`…) : un appel `describe` débloque les outils « wire » du dossier.
 
 ```mermaid
 flowchart LR
   I[INTENT] --> R[READ]
   R -->|depth complex| P[PROPOSE]
   R --> PL[PLAN]
-  P --> PL
+  P -->|advance| PL
+  P -->|hold| AN[ANSWER]
   PL --> A[ACT]
-  R -->|chemin court| A
+  R -->|depth short| A
   A --> V[VERIFY]
-  V --> AN[ANSWER]
+  V --> AN
 ```
+
+**INTENT** (boot) — `internal_plan_write` obligatoire avant exploration ; dossier `read_workspace` (`describe`).  
+**PROPOSE** (si `[depth: complex]`) — texte seul ; `[gate: hold]` **attend** la réponse utilisateur avant PLAN.  
+**Chemin court** — après READ, `[depth: short]` saute PROPOSE et PLAN → ACT direct.
 
 ```mermaid
 sequenceDiagram
@@ -192,9 +202,11 @@ sequenceDiagram
   M->>IDE: agent/done
 ```
 
-**Marqueurs utiles** — `[gate: hold|advance]`, `[depth: short|complex]`, `[phase: answering]`, `[phase: done]`. Seul le texte sous **`answering`** est la réponse chat ; le reste va dans **Thinking**.
+**Marqueurs edit** — `[gate: hold|advance]`, `[depth: short|complex]`, `[phase: answering]`, `[phase: done]`. Seul le texte sous **`answering`** est la réponse chat ; le reste va dans **Thinking**.
 
-**Outils par station (résumé)** — READ : lecture / exploration ; PLAN : todos ; ACT : mutations (`file_edit`, `bash`…) ; VERIFY : tests / lint sans mutation.
+**Marqueurs discuss** — `[discussion: reply]` puis `[discussion: done]` (pas de `[phase: …]` rail).
+
+**Outils par station (résumé)** — INTENT : plan interne + describe reads ; READ : lecture ; PLAN : `todo_write` + reads ; ACT : mutations (`edit_file` describe → `file_edit`…) ; VERIFY : `bash` / `lsp` / `verify_project`, pas de nouvelle mutation fichier.
 
 ---
 
@@ -204,10 +216,12 @@ Bloqueurs dans la boucle — pas un second « cerveau » parallèle :
 
 | Garde-fou | Effet |
 |-----------|--------|
-| Filtre par station | Pas de `file_edit` en plein READ, etc. |
+| Filtre par station + **tool folders** | Pas de `file_edit` en READ ; `describe` avant outils pliés |
+| Plan interne L2 | `internal_plan_write` requis en INTENT avant reads |
 | `[phase: done]` + todos ouverts | Refus de clôturer si travail déclaré en cours |
-| `answering` avant `done` | Réponse utilisateur exigée avant fin |
-| Stall ACT | Nudge si mutations bloquées trop longtemps |
+| `answering` avant `done` | Réponse utilisateur exigée avant fin (edit) |
+| Stall READ / ACT | Nudge si exploration ou mutations bloquées trop longtemps |
+| PROPOSE hold | `[gate: hold]` en depth complex — pause jusqu’au message utilisateur |
 | Permissions / hooks | Allow / ask / deny sur chemins et bash |
 
 Les **garde-fous** (gates, filtre par station, permissions) sont réglés par un **profil produit unique** côté moteur — plus de presets utilisateur `relaxed` / `normal` / `strict` dans Settings.
@@ -306,7 +320,7 @@ flowchart TB
 | **Ollama** | Local inference — the model **you** pick |
 | **drox.exe** | Agent loop, run rail, permissions, session |
 | **Drox IDE** | Editor + chat + LSP/diff in the workspace |
-| **You** | Repo, model, permission mode (default / plan / acceptEdits…) |
+| **You** | Repo, model, permission mode (`analyze` / `trust edit` / `I'm not crazy`) |
 
 No mandatory KDDS cloud account. Session data in **`.drox/`** on your disk.
 
@@ -353,7 +367,7 @@ flowchart LR
 
 | Component | Actual responsibility |
 |-----------|----------------------|
-| **`drox` engine** | Agent protocol: LLM turns, **run rail** (edit stations), tool filtering, gates, session. **The IDE does not drive agent logic.** |
+| **`drox` engine** | Agent protocol: LLM turns, **run rail** (edit stations), **tool folders**, gates, session. **The IDE does not drive agent logic.** |
 | **IDE** | Chat UI, spawns `drox --serve`, runs “client” tools (LSP, diff, blocking questions), renders the stream (Thinking / answer / work). |
 | **Ollama** | Local inference (or OpenAI-compatible endpoint). Engine sends prompts + tool schemas; receives tokens + tool_calls. |
 | **`.drox/`** | Sessions, transcripts, memory — on **your disk**, not ours. |
@@ -364,45 +378,55 @@ IDE ↔ engine: **stdio pipe**, **NDJSON** messages (one request/response or eve
 
 ## EN — One user message → one run
 
-Each send triggers **`agent.run`**. Two paths:
+Each send triggers **`agent.run`**. The engine then routes to **discussion** or **rail edit**:
 
 ```mermaid
 flowchart TD
   MSG["User message"] --> RUN["agent.run"]
-  RUN --> MODE{"Mode?"}
-  MODE -->|discuss| DISC["ArchitectDiscussion"]
-  MODE -->|edit| EDIT["Architect + run rail"]
+  RUN --> MODE{"Architect mode (vignettes)"}
+  MODE -->|Auto| PROBE["Intent probe — short boot LLM turn, no tools"]
+  PROBE --> ROUTE{Intent JSON}
+  ROUTE -->|greeting / simple Q&A| DISC
+  ROUTE -->|repo work| EDIT
+  MODE -->|Discussion| DISC["Discuss — limited reads, no rail"]
+  MODE -->|Action| EDIT["Edit — solo architect + run rail"]
 
-  DISC --> DOUT["Short reply — few or no tools"]
+  DISC --> DOUT["[discussion: reply] then [discussion: done]"]
 
-  EDIT --> RAIL["Stations: intent read plan act verify answer"]
+  EDIT --> RAIL["INTENT → READ → PROPOSE? → PLAN → ACT → VERIFY → ANSWER"]
   RAIL --> DONE{"[phase: done]?"}
   DONE -->|yes| END["Run end"]
   DONE -->|no| RAIL
 ```
 
-**Discuss** — chat, opinion, question: direct reply, no full rail.  
-**Edit** — code work: single agent, **run rail**, inline mutations (no executor sub-agents).
+**Auto** — boot **intent probe** (small LLM turn) picks discuss vs edit.  
+**Discussion** — chat / question: read-only tools allowed, **no** run rail or `todo_write` / mutations.  
+**Action** — code work: **single** architect, full **run rail**, inline mutations (**no** `delegate_executor` sub-agent).
 
-Mode comes from chat settings (`discuss` / `edit` / `auto`) and engine routing — no old pre-run LLM probe chain.
+Chat vignettes (`Auto` / `Discussion` / `Action`) map to `drox.architect.interactionMode`.
 
 ---
 
 ## EN — Run rail (edit)
 
-Since **1.4.0**, edit runs follow **stations**. The engine filters visible tools **per station** before each LLM turn.
+Since **1.4.0** (hardened in **1.4.1**), edit runs follow **7 linear stations**. The engine filters visible tools **per station** before each LLM turn. Some capabilities are grouped in **tool folders** (`read_workspace`, `edit_file`, `verify_project`…): a `describe` call unlocks the folder’s wire tools.
 
 ```mermaid
 flowchart LR
   I[INTENT] --> R[READ]
   R -->|depth complex| P[PROPOSE]
   R --> PL[PLAN]
-  P --> PL
+  P -->|advance| PL
+  P -->|hold| AN[ANSWER]
   PL --> A[ACT]
-  R -->|short path| A
+  R -->|depth short| A
   A --> V[VERIFY]
-  V --> AN[ANSWER]
+  V --> AN
 ```
+
+**INTENT** (boot) — mandatory `internal_plan_write` before exploration; `read_workspace` folder (`describe`).  
+**PROPOSE** (when `[depth: complex]`) — text only; `[gate: hold]` **waits** for the user before PLAN.  
+**Short path** — after READ, `[depth: short]` skips PROPOSE and PLAN → straight to ACT.
 
 ```mermaid
 sequenceDiagram
@@ -429,9 +453,11 @@ sequenceDiagram
   M->>IDE: agent/done
 ```
 
-**Useful markers** — `[gate: hold|advance]`, `[depth: short|complex]`, `[phase: answering]`, `[phase: done]`. Only **`answering`** text is the chat reply; the rest goes to **Thinking**.
+**Edit markers** — `[gate: hold|advance]`, `[depth: short|complex]`, `[phase: answering]`, `[phase: done]`. Only **`answering`** text is the chat reply; the rest goes to **Thinking**.
 
-**Tools per station (summary)** — READ: exploration ; PLAN: todos ; ACT: mutations (`file_edit`, `bash`…) ; VERIFY: tests / lint, no mutation.
+**Discuss markers** — `[discussion: reply]` then `[discussion: done]` (no rail `[phase: …]`).
+
+**Tools per station (summary)** — INTENT: internal plan + describe reads ; READ: exploration ; PLAN: `todo_write` + reads ; ACT: mutations (`edit_file` describe → `file_edit`…) ; VERIFY: `bash` / `lsp` / `verify_project`, no new file mutations.
 
 ---
 
@@ -441,10 +467,12 @@ Blockers in the loop — not a parallel second “brain”:
 
 | Guardrail | Effect |
 |-----------|--------|
-| Per-station filter | No `file_edit` during READ, etc. |
+| Per-station filter + **tool folders** | No `file_edit` in READ; `describe` before folded tools |
+| Internal plan L2 | `internal_plan_write` required in INTENT before reads |
 | `[phase: done]` + open todos | Refuse close while declared work remains |
-| `answering` before `done` | User reply required before end |
-| ACT stall | Nudge when mutations stay blocked too long |
+| `answering` before `done` | User reply required before end (edit) |
+| READ / ACT stall | Nudge when exploration or mutations stay blocked too long |
+| PROPOSE hold | `[gate: hold]` on complex depth — pause until user message |
 | Permissions / hooks | Allow / ask / deny on paths and bash |
 
 Presets (`relaxed` / `normal` / `strict`) were removed — a single **product profile** applies engine guardrails.
