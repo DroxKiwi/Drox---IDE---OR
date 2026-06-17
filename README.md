@@ -13,12 +13,14 @@
 **Ce dépôt** : binaires Windows, manifestes MAJ (`stable/latest.json`), notes de version.  
 **Pas les sources** — moteur & branding propriétaires [KDDS](https://github.com/DroxKiwi). Socle IDE : Code OSS (MIT) — [NOTICE.md](NOTICE.md).
 
+**Dernière version** : [1.4.1](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) · notes [RELEASE_NOTES](stable/1.4.1/RELEASE_NOTES.md)
+
 | | |
 |---|---|
-| **Dernière release publiée** | [1.4.0](https://github.com/DroxKiwi/Drox---IDE---OR/releases/tag/v1.4.0) |
-| **Prochaine** | **1.4.1** — notes prêtes · [RELEASE_NOTES](stable/1.4.1/RELEASE_NOTES.md) · installeur via `npm run drox:ship` puis GitHub Release |
-| Installer | [Releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases) |
-| MAJ auto | `stable/latest.json` (basculé sur 1.4.1 après upload de l’exe) |
+| **Version actuelle** | [**1.4.1**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/tag/v1.4.1) (17 juin 2026) |
+| **Précédente** | [1.4.0](stable/1.4.0/RELEASE_NOTES.md) |
+| Installer | [Releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) |
+| MAJ auto | `stable/latest.json` → **1.4.1** |
 | Ollama (recommandé) | [ollama.com](https://ollama.com/) |
 
 ---
@@ -505,8 +507,8 @@ We document **user-facing architecture and behavior**, not internal prompts or R
 | FR | EN |
 |----|-----|
 | [NOTICE.md](NOTICE.md) | License & attributions |
-| [stable/1.4.1/RELEASE_NOTES.md](stable/1.4.1/RELEASE_NOTES.md) | Release notes **1.4.1** (prochaine) |
-| [stable/1.4.0/RELEASE_NOTES.md](stable/1.4.0/RELEASE_NOTES.md) | Release notes 1.4.0 |
+| [stable/1.4.1/RELEASE_NOTES.md](stable/1.4.1/RELEASE_NOTES.md) | Release notes **1.4.1** (actuelle) |
+| [stable/1.4.0/RELEASE_NOTES.md](stable/1.4.0/RELEASE_NOTES.md) | Release notes 1.4.0 (précédente) |
 | [Issues](https://github.com/DroxKiwi/Drox---IDE---OR/issues) | Install & update issues |
 
 ---
