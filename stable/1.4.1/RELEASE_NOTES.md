@@ -1,8 +1,10 @@
 # Drox IDE 1.4.1
 
-## Avertissement — stabilisation dogfood
+## Avertissement — plus stable, encore expérimentale
 
-Release de **stabilisation** après le squelette moteur 1.4.0 (run rail). Comportement nettement amélioré (intent probe, rail VERIFY, plan interne, tool folders), mais le produit reste destiné au **dogfood et au développement** — pas encore un IDE agent « quotidien » en production.
+La **1.4.1 est nettement plus stable que la 1.4.0** : intent probe, patch rail VERIFY, plan interne, tool folders, profil moteur unique, Settings release simplifiés.
+
+**Elle reste expérimentale** : réservée au **dogfood, au développement et aux early adopters** — pas un IDE agent « quotidien » en production. Des boucles, lenteurs modèle ou comportements inattendus sont encore possibles.
 
 Polish UI chat → **1.4.2** · index / graphe → **1.4.3**.
 

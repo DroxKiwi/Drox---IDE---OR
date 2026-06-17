@@ -2,7 +2,11 @@
 
 ## ⚠️ STATUT — version 1.4.1 (juin 2026)
 
-> **Release de stabilisation** après la refonte moteur 1.4.0 (run rail, plan interne, tool folders). Le produit **progresse** mais reste en **dogfood / développement** — pas encore recommandé comme IDE agent quotidien en production. Polish UI → **1.4.2**.
+> **La 1.4.1 est nettement plus stable que la 1.4.0** (rail, discuss/edit, plan interne, tool folders, garde-fous VERIFY).  
+> **Elle reste toutefois expérimentale** : usage **dogfood / développement / early adopters** uniquement — **pas** un IDE agent de production pour un travail quotidien critique.  
+> Attendez-vous à des régressions, des lenteurs modèle et un polish UI incomplet (→ **1.4.2**).
+
+**En bref** : *plus fiable qu’avant, pas encore « produit fini ».*
 
 ---
 
@@ -236,13 +240,23 @@ flowchart TB
 
 | Pas encore | Piste |
 |------------|--------|
-| IDE agent fiable au quotidien | Dogfood actif — **1.4.1** stabilise le rail |
+| Produit **stable et fini** | **1.4.1** = nettement plus stable, **toujours expérimental** |
+| IDE agent fiable au quotidien (prod) | Dogfood / early adopters seulement |
 | UI chat polie (conducteur, thinking) | **1.4.2** |
 | Index sémantique / graphe / fast path | **1.4.3** |
 | Profils sampling LLM par phase (dev) | **1.4.4** (spec) |
 | Code source moteur ouvert | — |
 
 On documente l’**architecture et le comportement** côté utilisateur, pas les prompts internes ni le code Rust.
+
+---
+
+## EN — Status (1.4.1)
+
+> **1.4.1 is significantly more stable than 1.4.0** (rail, discuss/edit, internal plan, tool folders, VERIFY guardrails).  
+> **It is still experimental** — **dogfood / development / early adopters** only, **not** a production-grade daily driver. Expect regressions, model latency, and incomplete UI polish (→ **1.4.2**).
+
+**In short**: *more reliable than before, not a finished product yet.*
 
 ---
 
@@ -447,7 +461,8 @@ Same layout as FR: `.drox/` holds JSONL transcript (source of truth), UI replay 
 
 | Not yet | Track |
 |---------|--------|
-| Reliable day-to-day agent IDE | **1.4.1** improves rail stability (still dogfood) |
+| **Stable, finished product** | **1.4.1** = much more stable, **still experimental** |
+| Reliable day-to-day agent IDE (production) | Dogfood / early adopters only |
 | Polished chat UI (conductor, thinking) | **1.4.2** |
 | Semantic index / graph / fast path | **1.4.3** |
 | Per-phase LLM sampling profiles (dev) | **1.4.4** (spec) |
