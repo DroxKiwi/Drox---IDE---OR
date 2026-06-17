@@ -1,20 +1,20 @@
 # Drox IDE — releases officielles
 
-## ⚠️ STATUT — version 1.4.0 (juin 2026)
+## ⚠️ STATUT — version 1.4.1 (juin 2026)
 
-> **Cette release embarque la refonte moteur 1.4.0 (run rail). Le produit reste en phase de stabilisation et n’est pas utilisable en production** pour un travail agent quotidien. Usage **dogfood / développement** uniquement. Correctifs prévus en **1.4.1**.
+> **Release de stabilisation** après la refonte moteur 1.4.0 (run rail, plan interne, tool folders). Le produit **progresse** mais reste en **dogfood / développement** — pas encore recommandé comme IDE agent quotidien en production. Polish UI → **1.4.2**.
 
 ---
 
 **Ce dépôt** : binaires Windows, manifestes MAJ (`stable/latest.json`), notes de version.  
 **Pas les sources** — moteur & branding propriétaires [KDDS](https://github.com/DroxKiwi). Socle IDE : Code OSS (MIT) — [NOTICE.md](NOTICE.md).
 
-**Dernière version** : [1.4.0](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) · notes [RELEASE_NOTES](stable/1.4.0/RELEASE_NOTES.md)
-
 | | |
 |---|---|
-| Installer | [Releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) |
-| MAJ auto | `stable/latest.json` (lu au démarrage de l’IDE) |
+| **Dernière release publiée** | [1.4.0](https://github.com/DroxKiwi/Drox---IDE---OR/releases/tag/v1.4.0) |
+| **Prochaine** | **1.4.1** — notes prêtes · [RELEASE_NOTES](stable/1.4.1/RELEASE_NOTES.md) · installeur via `npm run drox:ship` puis GitHub Release |
+| Installer | [Releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases) |
+| MAJ auto | `stable/latest.json` (basculé sur 1.4.1 après upload de l’exe) |
 | Ollama (recommandé) | [ollama.com](https://ollama.com/) |
 
 ---
@@ -206,7 +206,7 @@ Bloqueurs dans la boucle — pas un second « cerveau » parallèle :
 | Stall ACT | Nudge si mutations bloquées trop longtemps |
 | Permissions / hooks | Allow / ask / deny sur chemins et bash |
 
-Les **presets** (`relaxed` / `normal` / `strict`) modulent la sévérité.
+Les **garde-fous** (gates, filtre par station, permissions) sont réglés par un **profil produit unique** côté moteur — plus de presets utilisateur `relaxed` / `normal` / `strict` dans Settings.
 
 ---
 
@@ -236,9 +236,10 @@ flowchart TB
 
 | Pas encore | Piste |
 |------------|--------|
-| Produit agent fiable au quotidien | Stabilisation **1.4.1** en cours |
+| IDE agent fiable au quotidien | Dogfood actif — **1.4.1** stabilise le rail |
 | UI chat polie (conducteur, thinking) | **1.4.2** |
 | Index sémantique / graphe / fast path | **1.4.3** |
+| Profils sampling LLM par phase (dev) | **1.4.4** (spec) |
 | Code source moteur ouvert | — |
 
 On documente l’**architecture et le comportement** côté utilisateur, pas les prompts internes ni le code Rust.
@@ -432,7 +433,7 @@ Blockers in the loop — not a parallel second “brain”:
 | ACT stall | Nudge when mutations stay blocked too long |
 | Permissions / hooks | Allow / ask / deny on paths and bash |
 
-Presets (`relaxed` / `normal` / `strict`) tune severity.
+Presets (`relaxed` / `normal` / `strict`) were removed — a single **product profile** applies engine guardrails.
 
 ---
 
@@ -446,9 +447,10 @@ Same layout as FR: `.drox/` holds JSONL transcript (source of truth), UI replay 
 
 | Not yet | Track |
 |---------|--------|
-| Reliable day-to-day agent IDE | **1.4.1** stabilization in progress |
+| Reliable day-to-day agent IDE | **1.4.1** improves rail stability (still dogfood) |
 | Polished chat UI (conductor, thinking) | **1.4.2** |
 | Semantic index / graph / fast path | **1.4.3** |
+| Per-phase LLM sampling profiles (dev) | **1.4.4** (spec) |
 | Open engine source | — |
 
 We document **user-facing architecture and behavior**, not internal prompts or Rust code.
@@ -460,7 +462,8 @@ We document **user-facing architecture and behavior**, not internal prompts or R
 | FR | EN |
 |----|-----|
 | [NOTICE.md](NOTICE.md) | License & attributions |
-| [stable/1.4.0/RELEASE_NOTES.md](stable/1.4.0/RELEASE_NOTES.md) | Release notes |
+| [stable/1.4.1/RELEASE_NOTES.md](stable/1.4.1/RELEASE_NOTES.md) | Release notes **1.4.1** (prochaine) |
+| [stable/1.4.0/RELEASE_NOTES.md](stable/1.4.0/RELEASE_NOTES.md) | Release notes 1.4.0 |
 | [Issues](https://github.com/DroxKiwi/Drox---IDE---OR/issues) | Install & update issues |
 
 ---
