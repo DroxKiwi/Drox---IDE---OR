@@ -1,12 +1,12 @@
 {
     "version":  "1.4.1",
-    "released":  "2026-06-17",
+    "released":  "2026-06-18",
     "productVersion":  "1.4.1",
     "platforms":  {
                       "win32-x64":  {
                                         "installerUrl":  "https://github.com/DroxKiwi/Drox---IDE---OR/releases/download/v1.4.1/Drox-IDE-Setup-1.4.1-win32-x64.exe",
-                                        "sha256":  "b1f8262a0ec46a847a4eb3398e99abc67174fd5540ec573dbce170d25dbde9e2",
-                                        "sizeBytes":  246436022
+                                        "sha256":  "1d378487394e9d81ae471f2b031b432902fb503085b5b3225cf741c18925aa67",
+                                        "sizeBytes":  246445337
                                     }
                   },
     "mandatory":  false,

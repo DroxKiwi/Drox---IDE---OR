@@ -10,6 +10,12 @@ Polish UI chat → **1.4.2** · index / graphe → **1.4.3**.
 
 ---
 
+## Hotfix (2026-06-18)
+
+- **Fenêtre de contexte architecte** : sélecteur **16k → 1M** dans le panneau Architecte (release + dev). Setting `drox.numCtx` — retélécharger l’installeur si vous êtes déjà en 1.4.1 (pas de notif MAJ automatique, même numéro de version).
+
+---
+
 ## Nouveautés (moteur)
 
 - **Intent probe** : routage discuss vs edit plus fiable (anglais moteur, marqueurs gates).
@@ -23,6 +29,7 @@ Polish UI chat → **1.4.2** · index / graphe → **1.4.3**.
 - **`droxSurface`** : build **release** = catalogue Settings minimal (~15 clés) ; **dev** (F5) = réglages LLM avancés et `drox.executablePath` (Settings IDE uniquement).
 - Stamp build moteur (epoch + git) en surface dev ; header chat semver seul en release.
 - Export discussion (dev), layout chat par fenêtre, garde-fous bundle avant publication.
+- **Hotfix** : sélecteur contexte architecte 16k–1M (panneau Architecte, release).
 
 ## Prérequis
 
