@@ -2,11 +2,11 @@
 
 ## ⚠️ STATUT — version 1.4.1 (juin 2026)
 
-> **La 1.4.1 est nettement plus stable que la 1.4.0** (rail, discuss/edit, plan interne, tool folders, garde-fous VERIFY).  
+> **La 1.4.1** apporte un rail stabilisé (discuss/edit, plan interne, tool folders, garde-fous VERIFY).  
 > **Elle reste toutefois expérimentale** : usage **dogfood / développement / early adopters** uniquement — **pas** un IDE agent de production pour un travail quotidien critique.  
 > Attendez-vous à des régressions, des lenteurs modèle et un polish UI incomplet (→ **1.4.2**).
 
-**En bref** : *plus fiable qu’avant, pas encore « produit fini ».*
+**En bref** : *version courante recommandée, pas encore « produit fini ».*
 
 ---
 
@@ -17,10 +17,9 @@
 
 | | |
 |---|---|
-| **Version actuelle** | [**1.4.1**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/tag/v1.4.1) (17 juin 2026) |
-| **Précédente** | [1.4.0](stable/1.4.0/RELEASE_NOTES.md) |
-| Installer | [Releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) |
-| MAJ auto | `stable/latest.json` → **1.4.1** |
+| **Version** | [**1.4.1**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (17 juin 2026) |
+| Installer | [Télécharger](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) |
+| MAJ auto | `stable/latest.json` |
 | Ollama (recommandé) | [ollama.com](https://ollama.com/) |
 
 ---
@@ -160,7 +159,7 @@ Les vignettes chat (`Auto` / `Discussion` / `Action`) correspondent à `drox.arc
 
 ## FR — Run rail (édition)
 
-Depuis la **1.4.0** (renforcé en **1.4.1**), l’édition suit **7 stations** linéaires. Le moteur filtre les outils visibles **par station** avant chaque tour LLM. Certaines capacités sont regroupées en **dossiers outils** (`read_workspace`, `edit_file`, `verify_project`…) : un appel `describe` débloque les outils « wire » du dossier.
+L’édition suit **7 stations** linéaires. Le moteur filtre les outils visibles **par station** avant chaque tour LLM. Certaines capacités sont regroupées en **dossiers outils** (`read_workspace`, `edit_file`, `verify_project`…) : un appel `describe` débloque les outils « wire » du dossier.
 
 ```mermaid
 flowchart LR
@@ -256,7 +255,7 @@ flowchart TB
 
 | Pas encore | Piste |
 |------------|--------|
-| Produit **stable et fini** | **1.4.1** = nettement plus stable, **toujours expérimental** |
+| Produit **stable et fini** | **1.4.1** — **expérimental**, dogfood / early adopters |
 | IDE agent fiable au quotidien (prod) | Dogfood / early adopters seulement |
 | UI chat polie (conducteur, thinking) | **1.4.2** |
 | Index sémantique / graphe / fast path | **1.4.3** |
@@ -269,10 +268,10 @@ On documente l’**architecture et le comportement** côté utilisateur, pas les
 
 ## EN — Status (1.4.1)
 
-> **1.4.1 is significantly more stable than 1.4.0** (rail, discuss/edit, internal plan, tool folders, VERIFY guardrails).  
+> **1.4.1** ships a stabilized rail (discuss/edit, internal plan, tool folders, VERIFY guardrails).  
 > **It is still experimental** — **dogfood / development / early adopters** only, **not** a production-grade daily driver. Expect regressions, model latency, and incomplete UI polish (→ **1.4.2**).
 
-**In short**: *more reliable than before, not a finished product yet.*
+**In short**: *current recommended release, not a finished product yet.*
 
 ---
 
@@ -411,7 +410,7 @@ Chat vignettes (`Auto` / `Discussion` / `Action`) map to `drox.architect.interac
 
 ## EN — Run rail (edit)
 
-Since **1.4.0** (hardened in **1.4.1**), edit runs follow **7 linear stations**. The engine filters visible tools **per station** before each LLM turn. Some capabilities are grouped in **tool folders** (`read_workspace`, `edit_file`, `verify_project`…): a `describe` call unlocks the folder’s wire tools.
+Edit runs follow **7 linear stations**. The engine filters visible tools **per station** before each LLM turn. Some capabilities are grouped in **tool folders** (`read_workspace`, `edit_file`, `verify_project`…): a `describe` call unlocks the folder’s wire tools.
 
 ```mermaid
 flowchart LR
@@ -491,7 +490,7 @@ Same layout as FR: `.drox/` holds JSONL transcript (source of truth), UI replay 
 
 | Not yet | Track |
 |---------|--------|
-| **Stable, finished product** | **1.4.1** = much more stable, **still experimental** |
+| **Stable, finished product** | **1.4.1** — **experimental**, dogfood / early adopters |
 | Reliable day-to-day agent IDE (production) | Dogfood / early adopters only |
 | Polished chat UI (conductor, thinking) | **1.4.2** |
 | Semantic index / graph / fast path | **1.4.3** |
@@ -507,8 +506,7 @@ We document **user-facing architecture and behavior**, not internal prompts or R
 | FR | EN |
 |----|-----|
 | [NOTICE.md](NOTICE.md) | License & attributions |
-| [stable/1.4.1/RELEASE_NOTES.md](stable/1.4.1/RELEASE_NOTES.md) | Release notes **1.4.1** (actuelle) |
-| [stable/1.4.0/RELEASE_NOTES.md](stable/1.4.0/RELEASE_NOTES.md) | Release notes 1.4.0 (précédente) |
+| [stable/1.4.1/RELEASE_NOTES.md](stable/1.4.1/RELEASE_NOTES.md) | Release notes |
 | [Issues](https://github.com/DroxKiwi/Drox---IDE---OR/issues) | Install & update issues |
 
 ---
