@@ -1,5 +1,13 @@
 # Drox IDE — releases officielles
 
+## But du projet — souveraineté
+
+Drox vise la **souveraineté numérique** : IDE et moteur agent en local, LLM via **Ollama** (ou API que tu configures), données de session dans **`.drox/`** sur ton disque — pas de compte cloud KDDS obligatoire, pas de télémétrie Microsoft dans l’installeur.
+
+**Seule exception réseau** : la **vérification de version** (lecture de `stable/latest.json` sur ce dépôt) pour proposer une MAJ si une release plus récente existe. Rien d’autre n’est requis pour coder avec l’agent.
+
+---
+
 ## ⚠️ STATUT — version 1.5.0 (juin 2026)
 
 > **Drox 1.5.0 remplace entièrement le moteur 1.4.x** (rail observateur, `role_split`, orchestration IDE — tout ça est **mort**).  
@@ -252,6 +260,14 @@ flowchart TB
 | Index sémantique / graphe | Piste 1.5.2+ |
 | Signature Authenticode | Prévu 1.5.1+ — SmartScreen « Éditeur inconnu » |
 | Code source moteur ouvert | — |
+
+---
+
+## EN — Project goal — sovereignty
+
+Drox aims for **digital sovereignty**: local IDE and agent engine, LLM via **Ollama** (or an API you configure), session data in **`.drox/`** on your disk — no mandatory KDDS cloud account, no Microsoft telemetry in the installer.
+
+**Only network exception**: **version check** (reading `stable/latest.json` on this repo) to offer an update when a newer release exists. Nothing else is required to work with the agent.
 
 ---
 
