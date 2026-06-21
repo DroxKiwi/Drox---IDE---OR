@@ -54,12 +54,23 @@ Ces pistes **ne bloquent pas** les releases courantes ; elles nourrissent la lig
 
 ## Guide débutant — installer et s’en servir
 
-**Drox IDE** reprend l’ergonomie de **[Visual Studio Code](https://code.visualstudio.com/)** avec un **chat agent** local via **Ollama**. Pas besoin de compiler : télécharge l’installeur ci-dessous.
+**Drox IDE** reprend l’ergonomie de **[Visual Studio Code](https://code.visualstudio.com/)** avec un **chat agent** branché sur un **moteur d’inférence de ton choix** (Ollama conseillé pour débuter en local). Pas besoin de compiler : télécharge l’installeur ci-dessous.
 
 ### Prérequis
 
 - **Windows** (installeur sur cette page ; Linux prévu **1.5.3**)
-- **[Ollama](https://ollama.com/)** + un modèle — ex. `ollama pull qwen2.5-coder`
+- Un **serveur LLM** — le plus simple : **[Ollama](https://ollama.com/)** + un modèle, ex. `ollama pull qwen2.5-coder`
+
+### Moteurs d’inférence (local ou cloud)
+
+Le wizard **« Connect your AI »** (vignette **Général**) choisit l’**hébergement** puis le **fournisseur**. Drox n’impose ni modèle ni cloud KDDS.
+
+| Hébergement | Moteurs (liens officiels) | Usage typique |
+|-------------|---------------------------|---------------|
+| **Local / perso** | [Ollama](https://ollama.com/) · [vLLM](https://docs.vllm.ai/) · [LM Studio](https://lmstudio.ai/) · [API OpenAI-compatible](https://platform.openai.com/docs/api-reference) | Modèle sur ton PC ou ton réseau — inférence **chez toi** (ou sur l’URL que tu indiques). |
+| **Cloud** | [Hugging Face Inference](https://huggingface.co/inference) · [Mistral AI](https://mistral.ai/) · Ollama distant · endpoint compatible | Inférence hébergée par le prestataire — sans gros GPU local ; confidentialité **selon leurs engagements** (offres privées / entreprise, CGU). |
+
+**Rapide** : Ollama local → `http://127.0.0.1:11434` + modèle. **vLLM / LM Studio** : URL du serveur lancé (ex. port 8000). **Cloud** : URL + clé API du fournisseur.
 
 ### Installation
 
@@ -70,7 +81,7 @@ Ces pistes **ne bloquent pas** les releases courantes ; elles nourrissent la lig
 ### Premiers pas
 
 1. **Fichier → Ouvrir un dossier…** — ton projet.
-2. Panneau **Drox Chat** : wizard **« Connect your AI »** → URL Ollama (`http://127.0.0.1:11434`) + modèle.
+2. Panneau **Drox Chat** : wizard **« Connect your AI »** → hébergement, fournisseur, URL du serveur + modèle.
 3. Envoyer un message ; choisir le **mode permission** dans le composer (Analyser / Édition / Confiance) selon ce que tu acceptes que l’agent modifie.
 
 ### L’essentiel
@@ -380,11 +391,11 @@ These themes **do not block** current releases; they feed **1.5.x+** and beyond.
 
 ## EN — Getting started
 
-**Drox IDE** is **[Visual Studio Code](https://code.visualstudio.com/)**-like, with a **local agent chat** via **Ollama**. No build required — use the installer from this repo’s [Releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest).
+**Drox IDE** is **[Visual Studio Code](https://code.visualstudio.com/)**-like, with a **local agent chat** on an **inference backend you choose** (Ollama is the easiest local start). No build required — use the installer from this repo’s [Releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest).
 
-1. Install **[Ollama](https://ollama.com/)** and pull a model (e.g. `qwen2.5-coder`).
+1. Set up an **LLM server** — e.g. **[Ollama](https://ollama.com/)** and `ollama pull qwen2.5-coder`, or [vLLM](https://docs.vllm.ai/) / [LM Studio](https://lmstudio.ai/) locally, or a **cloud** API ([Hugging Face](https://huggingface.co/inference), [Mistral](https://mistral.ai/), …). Local = your hardware; cloud = provider-hosted (privacy per **their** terms).
 2. Download and run **Drox-IDE-Setup** (Windows). If SmartScreen warns, **Run anyway** (unsigned installer for now).
-3. **File → Open Folder…**, open **Drox Chat**, complete **« Connect your AI »** (Ollama URL + model).
+3. **File → Open Folder…**, open **Drox Chat**, complete **« Connect your AI »** (hosting, provider, URL, model).
 4. Send a message; pick a **permission mode** in the composer (Analyze / Trust edit / I'm not crazy).
 
 Editor shortcuts and UI patterns: **[VS Code documentation](https://code.visualstudio.com/docs)**. Session data lives in **`.drox/`** on disk. Source repo (contributors): [Drox---IDE](https://github.com/DroxKiwi/Drox---IDE).
