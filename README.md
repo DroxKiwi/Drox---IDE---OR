@@ -1,10 +1,35 @@
 # Drox IDE — releases officielles
 
-## But du projet — souveraineté
+## But du projet — souveraineté et feuille de route
+
+### Où en est Drox (1.5.x)
+
+Le projet est en phase de **construction et de stabilisation de la base moteur** : mono-boucle TUI (`tui_mono`), shim RPC IDE, chat aligné sur le fil agent, wizard de connexion LLM. La release courante [**1.5.1**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) consolide cette fondation ; les prochaines (**1.5.2**, **1.5.3**) peaufinent l’UX et la distribution. Toujours **expérimental** — pas un IDE agent de production.
+
+### Souveraineté
 
 Drox vise la **souveraineté numérique** : IDE et moteur agent en local, LLM via **Ollama** (ou API que tu configures), données de session dans **`.drox/`** sur ton disque — pas de compte cloud KDDS obligatoire, pas de télémétrie Microsoft dans l’installeur.
 
 **Seule exception réseau** : la **vérification de version** (lecture de `stable/latest.json` sur ce dépôt) pour proposer une MAJ si une release plus récente existe. Rien d’autre n’est requis pour coder avec l’agent.
+
+### Vision produit
+
+Permettre de **maîtriser des projets volumineux** avec une **IA légère** (modèles locaux ou petits modèles distants) — peu gourmande en RAM/VRAM et en tokens. Comprendre d’abord (carte du repo, parcours des fichiers), agir ensuite, avec **observabilité locale** pour rester maître du système.
+
+### Pistes à venir (brainstorm)
+
+Fiches d’intention dans le dépôt sources [Drox---IDE](https://github.com/DroxKiwi/Drox---IDE) — [index brainstorm](https://github.com/DroxKiwi/Drox---IDE/blob/main/drox-engine/docs/feature-brainstorm/README.md) :
+
+| Thème | Objectif |
+|-------|----------|
+| **Télémétrie locale** | KPI par run/cycle, dashboards **100 % locaux** (`.drox/`) — aucun cloud |
+| **Cartographie & parcours fichiers** | Vue graphe du parcours modèle ; rôles « compréhension » avant mutation |
+| **IA légère & perf** | Réponses rapides sans sur-planifier ; backends distincts par rôle |
+| **Sessions & long run** | Gros chantiers multi-heures ; reprise historique progressive |
+| **Réglages & confiance** | Strictesse prompts, benchmark matériel/modèle, persona onboarding |
+| **IDE & transparence** | Preview web, chassis Agents Window Drox, sortie shell live |
+
+Ces pistes **ne bloquent pas** les releases courantes ; elles nourrissent la ligne **1.5.x+** et au-delà.
 
 ---
 
@@ -260,16 +285,41 @@ flowchart TB
 | Moteur 1.4.x | Rail observateur **obsolète** — archivé |
 | Index sémantique / graphe | Piste 1.5.2+ |
 | Linux `.deb` | Prévu **1.5.3** |
-| Signature Authenticode | Ultérieur |
+| Signature Authenticode | Prévu **1.5.3** |
 | Code source moteur ouvert | — |
 
 ---
 
-## EN — Project goal — sovereignty
+## EN — Project goal — sovereignty and roadmap
+
+### Where Drox stands (1.5.x)
+
+The project is in a **build and engine-stabilization** phase: TUI mono-loop (`tui_mono`), IDE RPC shim, agent-stream-aligned chat, LLM connection wizard. Current release [**1.5.1**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) consolidates that foundation; upcoming **1.5.2** and **1.5.3** refine UX and distribution. Still **experimental** — not a production agent IDE.
+
+### Sovereignty
 
 Drox aims for **digital sovereignty**: local IDE and agent engine, LLM via **Ollama** (or an API you configure), session data in **`.drox/`** on your disk — no mandatory KDDS cloud account, no Microsoft telemetry in the installer.
 
 **Only network exception**: **version check** (reading `stable/latest.json` on this repo) to offer an update when a newer release exists. Nothing else is required to work with the agent.
+
+### Product vision
+
+**Master large codebases** with **lightweight AI** (local or small remote models) — low RAM/VRAM and token use. Understand first (repo map, file traversal), act second, with **local observability** so you stay in control.
+
+### Upcoming themes (brainstorm)
+
+Intent notes live in the source repo [Drox---IDE](https://github.com/DroxKiwi/Drox---IDE) — [brainstorm index](https://github.com/DroxKiwi/Drox---IDE/blob/main/drox-engine/docs/feature-brainstorm/README.md):
+
+| Theme | Goal |
+|-------|------|
+| **Local telemetry** | Per-run/cycle KPIs, **100 % local** dashboards (`.drox/`) — no cloud |
+| **Mapping & file traversal** | Model path graph; “understanding” roles before mutation |
+| **Lightweight AI & perf** | Fast replies without over-planning; per-role inference backends |
+| **Sessions & long run** | Multi-hour work; progressive history resume |
+| **Settings & trust** | Prompt strictness, hardware/model benchmarks, onboarding persona |
+| **IDE & transparency** | Web preview, Drox Agents Window shell, live shell output |
+
+These themes **do not block** current releases; they feed **1.5.x+** and beyond.
 
 ---
 
@@ -345,7 +395,7 @@ Same as FR: `PermissionMode`, path/bash permissions, explicit `done`, context co
 | 1.4.x engine | Observer rail **obsolete** — archived |
 | Semantic index / graph | Planned 1.5.2+ |
 | Linux `.deb` | Planned **1.5.3** |
-| Authenticode signing | Planned later |
+| Authenticode signing | Planned **1.5.3** |
 | Open engine source | — |
 
 ---
