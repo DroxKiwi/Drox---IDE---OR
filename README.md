@@ -50,9 +50,29 @@ Ces pistes **ne bloquent pas** les releases courantes ; elles nourrissent la lig
 
 ---
 
+<a id="drox-tui"></a>
+
+## Drox TUI — plus simple pour débuter
+
+Tu découvres Drox ? Commence par le **terminal** : **[Drox TUI — releases officielles](https://github.com/DroxKiwi/Drox---TUI---OR)**.
+
+| | **Drox TUI** | **Drox IDE** (cette page) |
+|---|--------------|---------------------------|
+| **Interface** | Terminal (`drox-tui`) | Éditeur VS Code + chat |
+| **Prise en main** | **Plus légère** — install rapide, pas de gros IDE | LSP, diffs éditeur, wizard connexion |
+| **Moteur** | **`tui_mono`** (cœur agent) | Même moteur (`drox.exe` + shim) |
+
+Même boucle agent, mêmes backends LLM (Ollama, vLLM…). Le TUI suffit pour **tester l’agent** ; passe à l’IDE quand tu veux coder dans l’UI.
+
+**→** [Télécharger Drox TUI](https://github.com/DroxKiwi/Drox---TUI---OR/releases/latest) · guide complet sur le README du dépôt TUI.
+
+---
+
 <a id="guide-debutant"></a>
 
 ## Guide débutant — installer et s’en servir
+
+> **Débutant ?** Essaie d’abord **[Drox TUI](https://github.com/DroxKiwi/Drox---TUI---OR)** ([section](#drox-tui)) — plus simple que l’IDE.
 
 **Drox IDE** reprend l’ergonomie de **[Visual Studio Code](https://code.visualstudio.com/)** avec un **chat agent** branché sur un **moteur d’inférence de ton choix** (Ollama conseillé pour débuter en local). Pas besoin de compiler : télécharge l’installeur ci-dessous.
 
@@ -402,9 +422,29 @@ These themes **do not block** current releases; they feed **1.5.x+** and beyond.
 
 ---
 
+<a id="en-drox-tui"></a>
+
+## EN — Drox TUI — easier way to start
+
+New to Drox? Start in the **terminal**: **[Drox TUI — official releases](https://github.com/DroxKiwi/Drox---TUI---OR)**.
+
+| | **Drox TUI** | **Drox IDE** (this page) |
+|---|--------------|--------------------------|
+| **UI** | Terminal (`drox-tui`) | VS Code–like editor + chat |
+| **Onboarding** | **Lighter** — quick install, no heavy IDE | LSP, in-editor diffs, connection wizard |
+| **Engine** | **`tui_mono`** (agent core) | Same engine (`drox.exe` + shim) |
+
+Same agent loop, same LLM backends (Ollama, vLLM…). TUI is enough to **try the agent**; move to the IDE when you want to code inside the UI.
+
+**→** [Download Drox TUI](https://github.com/DroxKiwi/Drox---TUI---OR/releases/latest) · full guide on the TUI repo README.
+
+---
+
 <a id="en-getting-started"></a>
 
 ## EN — Getting started
+
+> **New here?** Try **[Drox TUI](https://github.com/DroxKiwi/Drox---TUI---OR)** first ([section](#en-drox-tui)) — simpler than the IDE.
 
 **Drox IDE** is **[Visual Studio Code](https://code.visualstudio.com/)**-like, with a **local agent chat** on an **inference backend you choose** (Ollama is the easiest local start). No build required — use the installer from this repo’s [Releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest).
 
