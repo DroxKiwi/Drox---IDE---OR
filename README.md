@@ -8,26 +8,27 @@ Drox vise la **souveraineté numérique** : IDE et moteur agent en local, LLM vi
 
 ---
 
-## ⚠️ STATUT — version 1.5.0 (juin 2026)
+## ⚠️ STATUT — version 1.5.1 (juin 2026)
 
-> **Drox 1.5.0 remplace entièrement le moteur 1.4.x** (rail observateur, `role_split`, orchestration IDE — tout ça est **mort**).  
-> Toujours **expérimental** — pas un IDE agent de prod — mais **nettement plus stable** qu’en 1.4.2 : mono-boucle TUI éprouvée, shim RPC, dogfood validé.
+> **Drox 1.5.1** : fil de chat aligné sur le TUI, wizard connexion IA, replay session — toujours sur la base moteur **1.5.0** (`tui_mono`).  
+> Toujours **expérimental** — pas un IDE agent de prod.
 
 | | |
 |---|---|
-| **Version** | [**1.5.0**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (juin 2026) · socle VS Code **1.126.0** |
-| **Utilisable au quotidien ?** | **Non** — early adopters / dogfood / curieux qui acceptent bugs et changements sans préavis. |
-| **Pourquoi essayer quand même ?** | Stack moteur **refondue** (plus de rail 1.4 bricolé) ; installeur Windows, Ollama local, mutations fichier validées en dogfood. |
-| **1.4.x** | **Obsolète** — dernière livraison 1.4.2 ; ne plus documenter ni bâtir dessus. |
+| **Version** | [**1.5.1**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (juin 2026) · socle VS Code **1.126.0** |
+| **Plateformes** | **Windows** (installeur) · **Linux** prévu **1.5.3** |
+| **Utilisable au quotidien ?** | **Non** — early adopters / dogfood. |
+| **Nouveautés 1.5.1** | Fil chronologique type TUI · wizard « Connect your AI » · `ask_user` markdown · UI chat en anglais. |
+| **1.4.x** | **Obsolète** — ne plus documenter ni bâtir dessus. |
 
-**En bref** : *expérimental oui, laboratoire cassant non — c’est la première release de la nouvelle base moteur.*
+**En bref** : *même moteur stable qu’en 1.5.0, UX chat enfin alignée sur le TUI.*
 
 ---
 
 **Ce dépôt** : binaires Windows, manifestes MAJ (`stable/latest.json`), notes de version.  
 **Pas les sources** — moteur & branding propriétaires [KDDS](https://github.com/DroxKiwi). Socle IDE : Code OSS (MIT) — [NOTICE.md](NOTICE.md).
 
-**Dernière version** : [1.5.0](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) · notes [RELEASE_NOTES](stable/1.5.0/RELEASE_NOTES.md)
+**Dernière version** : [1.5.1](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) · notes [RELEASE_NOTES](stable/1.5.1/RELEASE_NOTES.md)
 
 | | |
 |---|---|
@@ -258,7 +259,8 @@ flowchart TB
 | IDE agent « prod » | Toujours expérimental — mais base 1.5 bien plus saine que 1.4 |
 | Moteur 1.4.x | Rail observateur **obsolète** — archivé |
 | Index sémantique / graphe | Piste 1.5.2+ |
-| Signature Authenticode | Prévu 1.5.1+ — SmartScreen « Éditeur inconnu » |
+| Linux `.deb` | Prévu **1.5.3** |
+| Signature Authenticode | Ultérieur |
 | Code source moteur ouvert | — |
 
 ---
@@ -271,19 +273,20 @@ Drox aims for **digital sovereignty**: local IDE and agent engine, LLM via **Oll
 
 ---
 
-## EN — Status (1.5.0)
+## EN — Status (1.5.1)
 
-> **Drox 1.5.0 fully replaces the 1.4.x engine** (observer rail, `role_split`, IDE orchestration — all **gone**).  
-> Still **experimental** — not a production daily driver — but **much more stable** than 1.4.2: proven TUI mono-loop, RPC shim, validated dogfood.
+> **Drox 1.5.1** : TUI-aligned chat timeline, AI connection wizard, session replay — still on **1.5.0** engine (`tui_mono`).  
+> Still **experimental** — not a production daily driver.
 
 | | |
 |---|---|
-| **Version** | [**1.5.0**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (June 2026) · VS Code base **1.126.0** |
-| **Daily driver?** | **No** — early adopters / dogfood / curious users accepting bugs and breaking changes. |
-| **Why try anyway?** | **Rewritten** engine stack (no patched 1.4 rail); Windows installer, local Ollama, file mutations validated in dogfood. |
-| **1.4.x** | **Obsolete** — last ship 1.4.2; do not build or document on it. |
+| **Version** | [**1.5.1**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (June 2026) · VS Code base **1.126.0** |
+| **Platforms** | **Windows** installer · **Linux** planned **1.5.3** |
+| **Daily driver?** | **No** — early adopters / dogfood. |
+| **1.5.1 highlights** | Chronological TUI-style stream · « Connect your AI » wizard · markdown `ask_user` · English chat UI. |
+| **1.4.x** | **Obsolete** — do not build on it. |
 
-**In short**: *experimental yes, brittle lab no — first release on the new engine foundation.*
+**In short**: *same stable engine as 1.5.0, chat UX finally matches the TUI.*
 
 ---
 
@@ -341,7 +344,8 @@ Same as FR: `PermissionMode`, path/bash permissions, explicit `done`, context co
 | Production agent IDE | Still experimental — 1.5 foundation is much healthier than 1.4 |
 | 1.4.x engine | Observer rail **obsolete** — archived |
 | Semantic index / graph | Planned 1.5.2+ |
-| Authenticode signing | Planned 1.5.1+ |
+| Linux `.deb` | Planned **1.5.3** |
+| Authenticode signing | Planned later |
 | Open engine source | — |
 
 ---
@@ -351,7 +355,8 @@ Same as FR: `PermissionMode`, path/bash permissions, explicit `done`, context co
 | FR | EN |
 |----|-----|
 | [NOTICE.md](NOTICE.md) | License & attributions |
-| [stable/1.5.0/RELEASE_NOTES.md](stable/1.5.0/RELEASE_NOTES.md) | Release notes |
+| [stable/1.5.1/RELEASE_NOTES.md](stable/1.5.1/RELEASE_NOTES.md) | Release notes |
+| [stable/1.5.0/RELEASE_NOTES.md](stable/1.5.0/RELEASE_NOTES.md) | Previous release |
 | [Issues](https://github.com/DroxKiwi/Drox---IDE---OR/issues) | Install & update issues |
 | Sources (privé) | Branche `1.5.0` sur dépôt KDDS |
 
