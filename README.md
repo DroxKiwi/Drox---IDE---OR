@@ -90,7 +90,7 @@ Le wizard **« Connect your AI »** (vignette **Général**) choisit l’**hébe
 | **Local / perso** | [Ollama](https://ollama.com/) · [vLLM](https://docs.vllm.ai/) · [LM Studio](https://lmstudio.ai/) · [API OpenAI-compatible](https://platform.openai.com/docs/api-reference) | Modèle sur ton PC ou ton réseau — inférence **chez toi** (ou sur l’URL que tu indiques). Voir **[matériel](#materiel)**. |
 | **Cloud** | [Hugging Face Inference](https://huggingface.co/inference) · [Mistral AI](https://mistral.ai/) · Ollama distant · endpoint compatible | Inférence hébergée par le prestataire — sans gros GPU local ; confidentialité **selon leurs engagements** (offres privées / entreprise, CGU). |
 
-**Rapide** : Ollama local → `http://127.0.0.1:11434` + modèle ([matériel](#materiel)). **vLLM / LM Studio** : URL du serveur lancé (ex. port 8000). **Cloud** : URL + clé API du fournisseur.
+**Rapide** : Ollama local → `http://127.0.0.1:11434` + modèle ([matériel](#materiel) · [modèles testés](#modeles-conseilles)). **vLLM / LM Studio** : URL du serveur lancé (ex. port 8000). **Cloud** : URL + clé API du fournisseur.
 
 <a id="materiel"></a>
 
@@ -104,6 +104,19 @@ Je n’ai pas encore de minimum officiel — **j’ai testé** sur :
 |---------|-----|-----|----------|
 | **Station** | NVIDIA **RTX 3090** · 24 Go VRAM | **96 Go** | Ma grosse config — modèles plus larges, contextes élevés. |
 | **Portable** | Acer **Helios AI 16** · **RTX 5070 Ti** · 12 Go VRAM | *(mon laptop)* | Je l’utilise **aussi** — modèles adaptés à 12 Go (quantization, contexte raisonnable). |
+
+<a id="modeles-conseilles"></a>
+
+### Modèles conseillés (mes tests dev)
+
+J’ai surtout utilisé pendant le dev 1.5.x :
+
+| Modèle (Ollama) | Quantization | Format préféré |
+|-----------------|--------------|----------------|
+| **`qwen3.6:27b`** | **`q4_K_M`** | **`mtp`** |
+| **`gemma4:26b`** | **`q4_K_M`** | **`it-qat`** |
+
+À essayer : modèles **plus petits**, orientés **code** — utile sur 12 Go VRAM ou pour plus de réactivité.
 
 Peu de VRAM → petits modèles quantifiés ou **cloud** (tableau ci-dessus).
 
@@ -455,7 +468,7 @@ Same agent loop, same LLM backends (Ollama, vLLM…). TUI is enough to **try the
 
 <a id="en-hardware"></a>
 
-**Hardware (local inference)** — Drox IDE is VS Code–like; the model drives VRAM/RAM needs. **I’ve tested on:** **RTX 3090 24 GB + 96 GB RAM** (workstation) and **Acer Helios AI 16 · RTX 5070 Ti 12 GB** (my laptop — smaller/quantized models). Low VRAM → cloud or small models.
+**Hardware (local inference)** — Drox IDE is VS Code–like; the model drives VRAM/RAM needs. **I’ve tested on:** **RTX 3090 24 GB + 96 GB RAM** (workstation) and **Acer Helios AI 16 · RTX 5070 Ti 12 GB** (my laptop). **Models I mainly used:** `qwen3.6:27b` · `q4_K_M` · `mtp` ; `gemma4:26b` · `q4_K_M` · `it-qat`. Also try **smaller code-oriented** models. Low VRAM → cloud or small quants.
 
 Editor shortcuts and UI patterns: **[VS Code documentation](https://code.visualstudio.com/docs)**. Session data lives in **`.drox/`** on disk. Source repo (contributors): [Drox---IDE](https://github.com/DroxKiwi/Drox---IDE).
 
