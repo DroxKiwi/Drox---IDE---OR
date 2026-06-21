@@ -50,6 +50,42 @@ Ces pistes **ne bloquent pas** les releases courantes ; elles nourrissent la lig
 
 ---
 
+<a id="guide-debutant"></a>
+
+## Guide débutant — installer et s’en servir
+
+**Drox IDE** reprend l’ergonomie de **[Visual Studio Code](https://code.visualstudio.com/)** avec un **chat agent** local via **Ollama**. Pas besoin de compiler : télécharge l’installeur ci-dessous.
+
+### Prérequis
+
+- **Windows** (installeur sur cette page ; Linux prévu **1.5.3**)
+- **[Ollama](https://ollama.com/)** + un modèle — ex. `ollama pull qwen2.5-coder`
+
+### Installation
+
+1. **[Télécharger la dernière release](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest)** (fichier `Drox-IDE-Setup-…-win32-x64.exe`).
+2. Lancer le Setup — si SmartScreen bloque : **Informations complémentaires → Exécuter quand même** (installeur non signé pour l’instant).
+3. Ouvrir **Drox IDE**.
+
+### Premiers pas
+
+1. **Fichier → Ouvrir un dossier…** — ton projet.
+2. Panneau **Drox Chat** : wizard **« Connect your AI »** → URL Ollama (`http://127.0.0.1:11434`) + modèle.
+3. Envoyer un message ; choisir le **mode permission** dans le composer (Analyser / Édition / Confiance) selon ce que tu acceptes que l’agent modifie.
+
+### L’essentiel
+
+| Élément | Rôle |
+|---------|------|
+| **Chat** | Objectif en langage naturel ; le moteur lit le repo et propose des actions. |
+| **Vignettes** | Général · Architecte (modèle) · Composer (permissions). |
+| **`.drox/`** | Historique local du projet sur ton disque. |
+| **Éditeur** | Comme VS Code — **[aide officielle](https://code.visualstudio.com/docs)**. |
+
+**Sources** (contributeurs) : [Drox---IDE](https://github.com/DroxKiwi/Drox---IDE). **Binaires & MAJ** : ce dépôt [Drox---IDE---OR](https://github.com/DroxKiwi/Drox---IDE---OR).
+
+---
+
 **Ce dépôt** : binaires Windows, manifestes MAJ (`stable/latest.json`), notes de version.  
 **Pas les sources** — moteur & branding propriétaires [KDDS](https://github.com/DroxKiwi). Socle IDE : Code OSS (MIT) — [NOTICE.md](NOTICE.md).
 
@@ -337,6 +373,21 @@ These themes **do not block** current releases; they feed **1.5.x+** and beyond.
 | **1.4.x** | **Obsolete** — do not build on it. |
 
 **In short**: *same stable engine as 1.5.0, chat UX finally matches the TUI.*
+
+---
+
+<a id="en-getting-started"></a>
+
+## EN — Getting started
+
+**Drox IDE** is **[Visual Studio Code](https://code.visualstudio.com/)**-like, with a **local agent chat** via **Ollama**. No build required — use the installer from this repo’s [Releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest).
+
+1. Install **[Ollama](https://ollama.com/)** and pull a model (e.g. `qwen2.5-coder`).
+2. Download and run **Drox-IDE-Setup** (Windows). If SmartScreen warns, **Run anyway** (unsigned installer for now).
+3. **File → Open Folder…**, open **Drox Chat**, complete **« Connect your AI »** (Ollama URL + model).
+4. Send a message; pick a **permission mode** in the composer (Analyze / Trust edit / I'm not crazy).
+
+Editor shortcuts and UI patterns: **[VS Code documentation](https://code.visualstudio.com/docs)**. Session data lives in **`.drox/`** on disk. Source repo (contributors): [Drox---IDE](https://github.com/DroxKiwi/Drox---IDE).
 
 ---
 
