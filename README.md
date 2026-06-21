@@ -1,5 +1,9 @@
 # Drox IDE — releases officielles
 
+> ⚠️ **Avertissement** — Drox est **potentiellement instable** : développement **actif et exigeant**, produit encore **expérimental**. De **nombreuses mises à jour** sont prévues (1.5.2 config moteur, 1.5.3 UX, 1.5.4 Linux, etc.). Utiliser les [releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) et s’attendre à des évolutions fréquentes.
+>
+> ⚠️ **Warning** — Drox may be **unstable**: **active development**, still **experimental**. **Many updates** ahead. Use [releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) and expect frequent changes.
+
 ## But du projet — souveraineté et feuille de route
 
 ### Où en est Drox (1.5.x)
