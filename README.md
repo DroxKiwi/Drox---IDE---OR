@@ -4,17 +4,17 @@
 
 ### Où en est Drox (1.5.x)
 
-Je suis en phase de **construction et de stabilisation de la base moteur** : mono-boucle TUI (`tui_mono`), shim RPC IDE, chat aligné sur le fil agent, wizard de connexion LLM. La release courante [**1.5.1**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) consolide cette fondation ; les prochaines (**1.5.2**, **1.5.3**) peaufinent l’UX et la distribution. Toujours **expérimental** — pas un IDE agent de production.
+Le projet est en phase de **construction et de stabilisation de la base moteur** : mono-boucle TUI (`tui_mono`), shim RPC IDE, chat aligné sur le fil agent, wizard de connexion LLM. La release courante [**1.5.1**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) consolide cette fondation ; les prochaines (**1.5.2**, **1.5.3**) peaufinent l’UX et la distribution. Toujours **expérimental** — pas un IDE agent de production.
 
 ### Souveraineté
 
-Je conçois Drox pour la **souveraineté numérique** : IDE et moteur agent en local, LLM via **Ollama** (ou API que tu configures), données de session dans **`.drox/`** sur ton disque — pas de compte cloud KDDS obligatoire, pas de télémétrie Microsoft dans l’installeur.
+Drox vise la **souveraineté numérique** : IDE et moteur agent en local, LLM via **Ollama** (ou API que tu configures), données de session dans **`.drox/`** sur ton disque — pas de compte cloud KDDS obligatoire, pas de télémétrie Microsoft dans l’installeur.
 
 **Seule exception réseau** : la **vérification de version** (lecture de `stable/latest.json` sur ce dépôt) pour proposer une MAJ si une release plus récente existe. Rien d’autre n’est requis pour coder avec l’agent.
 
 ### Vision produit
 
-Je veux permettre de **maîtriser des projets volumineux** avec une **IA légère** (modèles locaux ou petits modèles distants) — peu gourmande en RAM/VRAM et en tokens. Comprendre d’abord (carte du repo, parcours des fichiers), agir ensuite, avec **observabilité locale** pour rester maître du système.
+L’objectif est de **maîtriser des projets volumineux** avec une **IA légère** (modèles locaux ou petits modèles distants) — peu gourmande en RAM/VRAM et en tokens. Le moteur privilégie la compréhension d’abord (carte du repo, parcours des fichiers), l’action ensuite, avec **observabilité locale** pour garder la main sur le système.
 
 ### Pistes à venir (brainstorm)
 
@@ -98,27 +98,27 @@ Le wizard **« Connect your AI »** (vignette **Général**) choisit l’**hébe
 
 **Drox IDE** = charge type VS Code. Le goulot, c’est surtout le **modèle** local : **VRAM** GPU + **RAM** selon taille du modèle et contexte.
 
-Je n’ai pas encore de minimum officiel — **j’ai testé** sur :
+Il n’existe pas encore de minimum officiel — configurations **utilisées pour le dogfood** 1.5.x :
 
 | Machine | GPU | RAM | Remarque |
 |---------|-----|-----|----------|
-| **Station** | NVIDIA **RTX 3090** · 24 Go VRAM | **96 Go** | Ma grosse config — modèles plus larges, contextes élevés. |
-| **Portable** | Acer **Helios AI 16** · **RTX 5070 Ti** · 12 Go VRAM | *(mon laptop)* | Je l’utilise **aussi** — modèles adaptés à 12 Go (quantization, contexte raisonnable). |
+| **Station** | NVIDIA **RTX 3090** · 24 Go VRAM | **96 Go** | Configuration haute — modèles plus larges, contextes élevés. |
+| **Portable** | Acer **Helios AI 16** · **RTX 5070 Ti** · 12 Go VRAM | *(laptop)* | Également **validée** — modèles adaptés à 12 Go (quantization, contexte raisonnable). |
 
 <a id="modeles-conseilles"></a>
 
-### Modèles conseillés (mes tests dev)
+### Modèles conseillés (dogfood 1.5.x)
 
-J’ai surtout utilisé pendant le dev 1.5.x :
+Combinaisons **principalement utilisées** pendant le développement 1.5.x :
 
-| Modèle (Ollama) | Quantization | Format préféré |
-|-----------------|--------------|----------------|
+| Modèle (Ollama) | Quantization | Format recommandé |
+|-----------------|--------------|-------------------|
 | **`qwen3.6:27b`** | **`q4_K_M`** | **`mtp`** |
 | **`gemma4:26b`** | **`q4_K_M`** | **`it-qat`** |
 
-À essayer : modèles **plus petits**, orientés **code** — utile sur 12 Go VRAM ou pour plus de réactivité.
+Il est **recommandé d’essayer** aussi des modèles **plus petits**, orientés **code** — utile sur 12 Go VRAM ou pour plus de réactivité.
 
-Peu de VRAM → petits modèles quantifiés ou **cloud** (tableau ci-dessus).
+Peu de VRAM → il est conseillé de privilégier de petits modèles quantifiés ou le **cloud** (tableau ci-dessus).
 
 ### Installation
 
@@ -389,17 +389,17 @@ flowchart TB
 
 ### Where Drox stands (1.5.x)
 
-I'm in a **build and engine-stabilization** phase: TUI mono-loop (`tui_mono`), IDE RPC shim, agent-stream-aligned chat, LLM connection wizard. Current release [**1.5.1**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) consolidates that foundation; upcoming **1.5.2** and **1.5.3** refine UX and distribution. Still **experimental** — not a production agent IDE.
+The project is in a **build and engine-stabilization** phase: TUI mono-loop (`tui_mono`), IDE RPC shim, agent-stream-aligned chat, LLM connection wizard. Current release [**1.5.1**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) consolidates that foundation; upcoming **1.5.2** and **1.5.3** refine UX and distribution. Still **experimental** — not a production agent IDE.
 
 ### Sovereignty
 
-I design Drox for **digital sovereignty**: local IDE and agent engine, LLM via **Ollama** (or an API you configure), session data in **`.drox/`** on your disk — no mandatory KDDS cloud account, no Microsoft telemetry in the installer.
+Drox aims for **digital sovereignty**: local IDE and agent engine, LLM via **Ollama** (or an API you configure), session data in **`.drox/`** on your disk — no mandatory KDDS cloud account, no Microsoft telemetry in the installer.
 
 **Only network exception**: **version check** (reading `stable/latest.json` on this repo) to offer an update when a newer release exists. Nothing else is required to work with the agent.
 
 ### Product vision
 
-I want to help you **master large codebases** with **lightweight AI** (local or small remote models) — low RAM/VRAM and token use. Understand first (repo map, file traversal), act second, with **local observability** so you stay in control.
+The goal is to **master large codebases** with **lightweight AI** (local or small remote models) — low RAM/VRAM and token use. The engine favors understanding first (repo map, file traversal), then action, with **local observability** to keep the system under control.
 
 ### Upcoming themes (brainstorm)
 
@@ -468,7 +468,7 @@ Same agent loop, same LLM backends (Ollama, vLLM…). TUI is enough to **try the
 
 <a id="en-hardware"></a>
 
-**Hardware (local inference)** — Drox IDE is VS Code–like; the model drives VRAM/RAM needs. **I’ve tested on:** **RTX 3090 24 GB + 96 GB RAM** (workstation) and **Acer Helios AI 16 · RTX 5070 Ti 12 GB** (my laptop). **Models I mainly used:** `qwen3.6:27b` · `q4_K_M` · `mtp` ; `gemma4:26b` · `q4_K_M` · `it-qat`. Also try **smaller code-oriented** models. Low VRAM → cloud or small quants.
+**Hardware (local inference)** — Drox IDE is VS Code–like; the model drives VRAM/RAM needs. **Dogfood configurations:** **RTX 3090 24 GB + 96 GB RAM** (workstation) and **Acer Helios AI 16 · RTX 5070 Ti 12 GB** (laptop, also validated). **Recommended models:** `qwen3.6:27b` · `q4_K_M` · `mtp` ; `gemma4:26b` · `q4_K_M` · `it-qat`. Smaller **code-oriented** models are also recommended. Low VRAM → cloud or small quants.
 
 Editor shortcuts and UI patterns: **[VS Code documentation](https://code.visualstudio.com/docs)**. Session data lives in **`.drox/`** on disk. Source repo (contributors): [Drox---IDE](https://github.com/DroxKiwi/Drox---IDE).
 
