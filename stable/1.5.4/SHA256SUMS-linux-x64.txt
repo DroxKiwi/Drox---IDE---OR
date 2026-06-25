@@ -1,1 +1,1 @@
-919ef3ffa5763e659e4ed47b7a28753aafbe09af44cb9b0f782ac176757efad9  Drox-IDE-1.5.4-linux-x64.deb
+605771fedcd0e4d718fbaaa36600e95dcea14c851e89de6e660194649db8a3d2  Drox-IDE-1.5.4-linux-x64.deb
