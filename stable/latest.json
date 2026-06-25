@@ -5,8 +5,8 @@
   "platforms": {
     "win32-x64": {
       "installerUrl": "https://github.com/DroxKiwi/Drox---IDE---OR/releases/download/v1.5.4/Drox-IDE-Setup-1.5.4-win32-x64.exe",
-      "sha256": "47857ecd0a41de26d3f4a64605cb66604bad7abaf1ac01a31745893b09936f73",
-      "sizeBytes": 296745520
+      "sha256": "aa7c13cc4ddf65cfeae2eb167856ea4ff1119b10982abb5a7b493e3c434da5bb",
+      "sizeBytes": 296723956
     },
     "linux-x64": {
       "installerUrl": "https://github.com/DroxKiwi/Drox---IDE---OR/releases/download/v1.5.4/Drox-IDE-1.5.4-linux-x64.deb",
