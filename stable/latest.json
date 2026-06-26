@@ -1,12 +1,12 @@
 {
-  "version": "1.5.5",
+  "version": "1.5.6",
   "released": "2026-06-26",
-  "productVersion": "1.5.5",
+  "productVersion": "1.5.6",
   "platforms": {
     "win32-x64": {
-      "installerUrl": "https://github.com/DroxKiwi/Drox---IDE---OR/releases/download/v1.5.5/Drox-IDE-Setup-1.5.5-win32-x64.exe",
-      "sha256": "2240fdc4ae90bb91158ff8a41fe1a001c433748ec2548b1592715bc74264137d",
-      "sizeBytes": 296721263
+      "installerUrl": "https://github.com/DroxKiwi/Drox---IDE---OR/releases/download/v1.5.6/Drox-IDE-Setup-1.5.6-win32-x64.exe",
+      "sha256": "59aa0e987fb0167640fc68d959a804d5eb79857ad9cc98c6c420f9627fd51fbf",
+      "sizeBytes": 296711452
     },
     "linux-x64": {
       "installerUrl": "https://github.com/DroxKiwi/Drox---IDE---OR/releases/download/v1.5.5/Drox-IDE-1.5.5-linux-x64.deb",
@@ -15,5 +15,5 @@
     }
   },
   "mandatory": false,
-  "notesUrl": "https://github.com/DroxKiwi/Drox---IDE---OR/blob/main/stable/1.5.5/RELEASE_NOTES.md"
+  "notesUrl": "https://github.com/DroxKiwi/Drox---IDE---OR/blob/main/stable/1.5.6/RELEASE_NOTES.md"
 }
