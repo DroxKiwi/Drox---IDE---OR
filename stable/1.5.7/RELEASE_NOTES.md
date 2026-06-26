@@ -5,6 +5,8 @@
 - **Reprise après erreur LLM** : quand un run est coupé (erreur serveur, timeout, etc.), la dernière bulle utilisateur affiche **Reprendre** et **Recommencer**.
   - **Reprendre** — relance depuis le point de coupure (sortie partielle du modèle conservée).
   - **Recommencer** — efface tout ce que le modèle a produit depuis ce message, puis relance.
+- **Smart paste** : envoi de messages avec extrait de code lié depuis l’éditeur (chip dans le composer).
+- **Historique** : rechargement de session et rejeu UI ne bloquent plus l’envoi de nouveaux messages.
 
 ## Technique
 
