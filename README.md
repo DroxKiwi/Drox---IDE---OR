@@ -1,14 +1,14 @@
 # Drox IDE — releases officielles
 
-> ⚠️ **Avertissement** — Drox est **potentiellement instable** : développement **actif**, produit encore **expérimental**. Release courante [**1.5.3**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest). Prochaine étape : **1.5.4** (Linux `.deb`, signature Authenticode). Utiliser les [releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) et s’attendre à des évolutions fréquentes.
+> ⚠️ **Avertissement** — Drox est **potentiellement instable** : développement **actif**, produit encore **expérimental**. Release courante [**1.5.6**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (Windows + Linux). Branche dev **1.5.7** (correctifs) · prochain chantier **1.5.8** (MCP). Utiliser les [releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) et s’attendre à des évolutions fréquentes.
 >
-> ⚠️ **Warning** — Drox may be **unstable**: **active development**, still **experimental**. Current release [**1.5.3**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest). Next: **1.5.4** (Linux `.deb`, Authenticode signing). Use [releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) and expect frequent changes.
+> ⚠️ **Warning** — Drox may be **unstable**: **active development**, still **experimental**. Current release [**1.5.6**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (Windows + Linux). Dev branch **1.5.7** (fixes) · next milestone **1.5.8** (MCP). Use [releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) and expect frequent changes.
 
 ## But du projet — souveraineté et feuille de route
 
 ### Où en est Drox (1.5.x)
 
-Le projet est en phase de **stabilisation de la base moteur 1.5.0** (`tui_mono`) et de **polish UX chat**. La release courante [**1.5.3**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) apporte diffs fil, cartes shell, style TUI VT323 et rejeu session. **1.5.4** : distribution Linux et confiance Windows (signature). Toujours **expérimental** — pas un IDE agent de production.
+Le projet est en phase de **stabilisation de la base moteur 1.5.0** (`tui_mono`) et de **polish UX chat**. La release courante [**1.5.6**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) corrige le fil linéaire (bulle user, scroll diffs, warmup, bouton envoyer) après la **1.5.5**. **Windows** et **Linux** `.deb` sont distribués depuis la **1.5.4** ; signature Authenticode Windows reste à venir. Toujours **expérimental** — pas un IDE agent de production.
 
 ### Souveraineté
 
@@ -37,21 +37,22 @@ Ces pistes **ne bloquent pas** les releases courantes ; elles nourrissent la lig
 
 ---
 
-## ⚠️ STATUT — version 1.5.3 (juin 2026)
+## ⚠️ STATUT — version 1.5.6 (juin 2026)
 
-> **Drox 1.5.3** : diffs fichier dans le fil, cartes shell, polish messages user, style VT323, historique sessions + rejeu, correctifs WORK — moteur **`tui_mono`** (1.5.0) + config IDE (1.5.2).  
+> **Drox 1.5.6** : correctifs chat post-**1.5.5** — bulle user à l’envoi (même après erreur réseau), scroll interne des diffs, warmup visible pendant un cycle, bouton envoyer style TUI — moteur **`tui_mono`** (1.5.0) inchangé.  
 > Toujours **expérimental** — pas un IDE agent de prod.
 
 | | |
 |---|---|
-| **Version** | [**1.5.3**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (juin 2026) · socle VS Code **1.126.0** |
-| **Plateformes** | **Windows** (installeur) · **Linux** `.deb` prévu **1.5.4** |
+| **Version** | [**1.5.6**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (juin 2026) · socle VS Code **1.127.0** |
+| **Plateformes** | **Windows** (installeur) · **Linux** `.deb` amd64 (Ubuntu 22.04 / 24.04) |
 | **Utilisable au quotidien ?** | **Non** — early adopters / dogfood. |
-| **Nouveautés 1.5.3** | Diffs inline + undo/redo · cartes bash/PowerShell · composer auto-grow · fil rétro VT323 · rejeu session · popup nouveautés au 1er lancement. |
-| **1.5.2** | Config moteur / sampling depuis l’IDE. |
+| **Nouveautés 1.5.6** | Bulle user optimiste · scroll diffs · routage réponses assistant · warmup + grille TUI · pulse bouton envoyer en run. |
+| **1.5.5** | Fil linéaire multi-tours (layout superposition corrigé). |
+| **1.5.4** | Linux `.deb` + Open VSX + « Ouvrir avec Drox ». |
 | **1.4.x** | **Obsolète** — ne plus documenter ni bâtir dessus. |
 
-**En bref** : *fil agent plus lisible et plus proche du TUI ; même moteur stable qu’en 1.5.0.*
+**En bref** : *fil agent plus fiable après la 1.5.5 ; même moteur qu’en 1.5.0.*
 
 ---
 
@@ -83,7 +84,7 @@ Même boucle agent, mêmes backends LLM (Ollama, vLLM…). Le TUI suffit pour **
 
 ### Prérequis
 
-- **Windows** (installeur sur cette page ; Linux `.deb` prévu **1.5.4**)
+- **Windows** (installeur) ou **Linux** (`.deb` amd64 — Ubuntu 22.04 / 24.04)
 - Un **serveur LLM** — le plus simple : **[Ollama](https://ollama.com/)** + un modèle, ex. `ollama pull qwen2.5-coder`
 
 ### Moteurs d’inférence (local ou cloud)
@@ -127,8 +128,10 @@ Peu de VRAM → il est conseillé de privilégier de petits modèles quantifiés
 
 ### Installation
 
-1. **[Télécharger la dernière release](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest)** (fichier `Drox-IDE-Setup-…-win32-x64.exe`).
-2. Lancer le Setup — si SmartScreen bloque : **Informations complémentaires → Exécuter quand même** (installeur non signé pour l’instant).
+1. **[Télécharger la dernière release](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest)** :
+   - **Windows** : `Drox-IDE-Setup-…-win32-x64.exe`
+   - **Linux** : `Drox-IDE-…-linux-x64.deb` (`sudo dpkg -i …` puis dépendances manquantes si besoin)
+2. **Windows** : lancer le Setup — si SmartScreen bloque : **Informations complémentaires → Exécuter quand même** (installeur non signé pour l’instant).
 3. Ouvrir **Drox IDE**.
 
 ### Premiers pas
@@ -153,7 +156,7 @@ Peu de VRAM → il est conseillé de privilégier de petits modèles quantifiés
 **Ce dépôt** : binaires Windows, manifestes MAJ (`stable/latest.json`), notes de version.  
 **Pas les sources** — moteur & branding propriétaires [KDDS](https://github.com/DroxKiwi). Socle IDE : Code OSS (MIT) — [NOTICE.md](NOTICE.md).
 
-**Dernière version** : [1.5.3](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) · notes [RELEASE_NOTES](stable/1.5.3/RELEASE_NOTES.md)
+**Dernière version** : [1.5.6](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) · notes [RELEASE_NOTES](stable/1.5.6/RELEASE_NOTES.md)
 
 | | |
 |---|---|
@@ -383,9 +386,8 @@ flowchart TB
 |-----|--------|
 | IDE agent « prod » | Toujours expérimental — mais base 1.5 bien plus saine que 1.4 |
 | Moteur 1.4.x | Rail observateur **obsolète** — archivé |
-| Index sémantique / graphe | Piste 1.5.4+ |
-| Linux `.deb` | Prévu **1.5.4** |
-| Signature Authenticode | Prévu **1.5.4** |
+| Index sémantique / graphe | Piste 1.5.8+ |
+| Signature Authenticode Windows | À venir |
 | Code source moteur ouvert | — |
 
 ---
@@ -394,7 +396,7 @@ flowchart TB
 
 ### Where Drox stands (1.5.x)
 
-The project is in **1.5.0 engine stabilization** (`tui_mono`) and **chat UX polish**. Current release [**1.5.3**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) adds thread diffs, shell cards, VT323 styling, and session replay. **1.5.4**: Linux distribution and Windows trust (signing). Still **experimental** — not a production agent IDE.
+The project is in **1.5.0 engine stabilization** (`tui_mono`) and **chat UX polish**. Current release [**1.5.6**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) fixes linear thread UX after **1.5.5** (optimistic user bubble, diff scroll, warmup, send button). **Windows** and **Linux** `.deb` ship since **1.5.4**; Windows Authenticode signing still pending. Still **experimental** — not a production agent IDE.
 
 ### Sovereignty
 
@@ -423,21 +425,22 @@ These themes **do not block** current releases; they feed **1.5.x+** and beyond.
 
 ---
 
-## EN — Status (1.5.3)
+## EN — Status (1.5.6)
 
-> **Drox 1.5.3** : inline file diffs, shell cards, user-message polish, VT323 thread styling, session history + replay, WORK strip fixes — **`tui_mono`** engine (1.5.0) + IDE config (1.5.2).  
+> **Drox 1.5.6** : post-**1.5.5** chat fixes — optimistic user bubble (incl. after network errors), internal diff scroll, visible warmup during runs, TUI-style send button — **`tui_mono`** engine (1.5.0) unchanged.  
 > Still **experimental** — not a production daily driver.
 
 | | |
 |---|---|
-| **Version** | [**1.5.3**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (June 2026) · VS Code base **1.126.0** |
-| **Platforms** | **Windows** installer · **Linux** `.deb` planned **1.5.4** |
+| **Version** | [**1.5.6**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (June 2026) · VS Code base **1.127.0** |
+| **Platforms** | **Windows** installer · **Linux** `.deb` amd64 (Ubuntu 22.04 / 24.04) |
 | **Daily driver?** | **No** — early adopters / dogfood. |
-| **1.5.3 highlights** | Inline diffs + undo/redo · bash/PowerShell cards · auto-grow composer · retro VT323 thread · session replay · what’s-new splash on first launch. |
-| **1.5.2** | Engine / sampling config from IDE. |
+| **1.5.6 highlights** | Optimistic user bubble · diff scroll · assistant reply routing · warmup + TUI grid · send-button pulse while running. |
+| **1.5.5** | Linear multi-turn thread layout fix. |
+| **1.5.4** | Linux `.deb` + Open VSX + “Open with Drox”. |
 | **1.4.x** | **Obsolete** — do not build on it. |
 
-**In short**: *more readable agent thread, closer to the TUI; same stable engine as 1.5.0.*
+**In short**: *more reliable thread after 1.5.5; same engine as 1.5.0.*
 
 ---
 
@@ -533,9 +536,8 @@ Same as FR: `PermissionMode`, path/bash permissions, explicit `done`, context co
 |-----|--------|
 | Production agent IDE | Still experimental — 1.5 foundation is much healthier than 1.4 |
 | 1.4.x engine | Observer rail **obsolete** — archived |
-| Semantic index / graph | Planned 1.5.4+ |
-| Linux `.deb` | Planned **1.5.4** |
-| Authenticode signing | Planned **1.5.4** |
+| Semantic index / graph | Planned 1.5.8+ |
+| Windows Authenticode signing | Pending |
 | Open engine source | — |
 
 ---
@@ -545,10 +547,10 @@ Same as FR: `PermissionMode`, path/bash permissions, explicit `done`, context co
 | FR | EN |
 |----|-----|
 | [NOTICE.md](NOTICE.md) | License & attributions |
-| [stable/1.5.3/RELEASE_NOTES.md](stable/1.5.3/RELEASE_NOTES.md) | Release notes |
-| [stable/1.5.2/RELEASE_NOTES.md](stable/1.5.2/RELEASE_NOTES.md) | Previous release |
+| [stable/1.5.6/RELEASE_NOTES.md](stable/1.5.6/RELEASE_NOTES.md) | Release notes |
+| [stable/1.5.5/RELEASE_NOTES.md](stable/1.5.5/RELEASE_NOTES.md) | Previous release |
 | [Issues](https://github.com/DroxKiwi/Drox---IDE---OR/issues) | Install & update issues |
-| Sources (privé) | Branche `1.5.0` sur dépôt KDDS |
+| Sources (privé) | Branche `1.5.7` sur dépôt KDDS |
 
 ---
 
