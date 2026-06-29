@@ -1,14 +1,14 @@
 # Drox IDE — releases officielles
 
-> ⚠️ **Avertissement** — Drox est **potentiellement instable** : développement **actif**, produit encore **expérimental**. Release courante [**1.5.9**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (Windows + Linux). Branche dev **1.5.10** · chantiers MCP / Agents Window reportés ([brainstorm](https://github.com/DroxKiwi/Drox---IDE/blob/main/drox-engine/docs/feature-brainstorm/README.md)). Utiliser les [releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) et s’attendre à des évolutions fréquentes.
+> ⚠️ **Avertissement** — Drox est **potentiellement instable** : développement **actif**, produit encore **expérimental**. Release courante [**1.5.10**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (Windows **1.5.10** · Linux **1.5.9**). Branche dev **1.5.11** · chantiers MCP / Agents Window reportés ([brainstorm](https://github.com/DroxKiwi/Drox---IDE/blob/main/drox-engine/docs/feature-brainstorm/README.md)). Utiliser les [releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) et s’attendre à des évolutions fréquentes.
 >
-> ⚠️ **Warning** — Drox may be **unstable**: **active development**, still **experimental**. Current release [**1.5.9**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (Windows + Linux). Dev branch **1.5.10** · MCP / Agents Window deferred ([brainstorm](https://github.com/DroxKiwi/Drox---IDE/blob/main/drox-engine/docs/feature-brainstorm/README.md)). Use [releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) and expect frequent changes.
+> ⚠️ **Warning** — Drox may be **unstable**: **active development**, still **experimental**. Current release [**1.5.10**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (Windows **1.5.10** · Linux **1.5.9**). Dev branch **1.5.11** · MCP / Agents Window deferred ([brainstorm](https://github.com/DroxKiwi/Drox---IDE/blob/main/drox-engine/docs/feature-brainstorm/README.md)). Use [releases](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) and expect frequent changes.
 
 ## But du projet — souveraineté et feuille de route
 
 ### Où en est Drox (1.5.x)
 
-Le projet est en phase de **stabilisation de la base moteur 1.5.0** (`tui_mono`) et de **polish UX chat**. La release courante [**1.5.9**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) améliore le **scroll du fil** (lecture sans repositionnement forcé), le **reset workspace** (`MEMORY.md` + `.drox/`) et un **composer épuré** après la **1.5.8**. **Windows** et **Linux** `.deb` sont en **1.5.9**. Signature Authenticode Windows reste à venir. Toujours **expérimental** — pas un IDE agent de production.
+Le projet est en phase de **stabilisation de la base moteur 1.5.0** (`tui_mono`) et de **polish UX chat**. La release courante [**1.5.10**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) apporte le **run recovery** toujours disponible (Reprendre / Recommencer), le **respawn moteur différé** et les **métriques tokens live**. **Windows** est en **1.5.10** ; **Linux** `.deb` reste en **1.5.9** le temps du prochain ship Linux. Signature Authenticode Windows reste à venir. Toujours **expérimental** — pas un IDE agent de production.
 
 ### Souveraineté
 
@@ -37,17 +37,18 @@ Ces pistes **ne bloquent pas** les releases courantes ; elles nourrissent la lig
 
 ---
 
-## ⚠️ STATUT — version 1.5.9 (juin 2026)
+## ⚠️ STATUT — version 1.5.10 (juin 2026)
 
-> **Drox 1.5.9** : polish UX chat post-**1.5.8** — **scroll intelligent** du fil pendant un run, **reset workspace** incluant `MEMORY.md`, **composer épuré** (icônes redondantes retirées) — moteur **`tui_mono`** (1.5.0) inchangé.  
+> **Drox 1.5.10** : **run recovery** toujours sur le dernier message user (y compris après reload), **respawn moteur différé** pendant un run, **métriques tokens live**, padding composer — moteur **`tui_mono`** (1.5.0) inchangé.  
 > Toujours **expérimental** — pas un IDE agent de prod.
 
 | | |
 |---|---|
-| **Version** | [**1.5.9**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (juin 2026) · socle VS Code **1.127.0** |
-| **Plateformes** | **Windows** installeur **1.5.9** · **Linux** `.deb` amd64 **1.5.9** (Ubuntu 22.04 / 24.04) |
+| **Version** | [**1.5.10**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (juin 2026) · socle VS Code **1.127.0** |
+| **Plateformes** | **Windows** installeur **1.5.10** · **Linux** `.deb` amd64 **1.5.9** (Ubuntu 22.04 / 24.04) |
 | **Utilisable au quotidien ?** | **Non** — early adopters / dogfood. |
-| **Nouveautés 1.5.9** | Scroll stick-to-bottom · reset `MEMORY.md` · composer épuré · splash « What's new ». |
+| **Nouveautés 1.5.10** | Recovery persistante · respawn différé · métriques live · padding composer. |
+| **1.5.9** | Scroll stick-to-bottom · reset `MEMORY.md` · composer épuré. |
 | **1.5.8** | Native thinking Reasoning · fil Work chronologique · Planifier · warmup fil · padding ask_user. |
 | **1.5.7** | Reprise après erreur LLM · smart paste · rejeu session. |
 | **1.4.x** | **Obsolète** — ne plus documenter ni bâtir dessus. |
@@ -156,7 +157,7 @@ Peu de VRAM → il est conseillé de privilégier de petits modèles quantifiés
 **Ce dépôt** : binaires Windows, manifestes MAJ (`stable/latest.json`), notes de version.  
 **Pas les sources** — moteur & branding propriétaires [KDDS](https://github.com/DroxKiwi). Socle IDE : Code OSS (MIT) — [NOTICE.md](NOTICE.md).
 
-**Dernière version** : [1.5.9](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) · notes [RELEASE_NOTES](stable/1.5.9/RELEASE_NOTES.md)
+**Dernière version** : [1.5.10](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) · notes [RELEASE_NOTES](stable/1.5.10/RELEASE_NOTES.md)
 
 | | |
 |---|---|
@@ -396,7 +397,7 @@ flowchart TB
 
 ### Where Drox stands (1.5.x)
 
-The project is in **1.5.0 engine stabilization** (`tui_mono`) and **chat UX polish**. Current release [**1.5.9**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) improves **thread scroll** (read without forced jump), **workspace reset** (`MEMORY.md` + `.drox/`), and a **leaner composer** after **1.5.8**. **Windows** and **Linux** `.deb` are on **1.5.9**. Windows Authenticode signing still pending. Still **experimental** — not a production agent IDE.
+The project is in **1.5.0 engine stabilization** (`tui_mono`) and **chat UX polish**. Current release [**1.5.10**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) adds **always-on run recovery** (Resume / Restart), **deferred engine respawn**, and **live token metrics**. **Windows** is on **1.5.10**; **Linux** `.deb` remains on **1.5.9** until the next Linux ship. Windows Authenticode signing still pending. Still **experimental** — not a production agent IDE.
 
 ### Sovereignty
 
@@ -425,17 +426,18 @@ These themes **do not block** current releases; they feed **1.5.x+** and beyond.
 
 ---
 
-## EN — Status (1.5.9)
+## EN — Status (1.5.10)
 
-> **Drox 1.5.9** : post-**1.5.8** chat UX polish — **smart scroll** during runs, **workspace reset** including `MEMORY.md`, **leaner composer** (redundant icons removed) — **`tui_mono`** engine (1.5.0) unchanged.  
+> **Drox 1.5.10** : **always-on run recovery** on your last user message (including after reload), **deferred engine respawn** during runs, **live token metrics**, composer padding — **`tui_mono`** engine (1.5.0) unchanged.  
 > Still **experimental** — not a production daily driver.
 
 | | |
 |---|---|
-| **Version** | [**1.5.9**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (June 2026) · VS Code base **1.127.0** |
-| **Platforms** | **Windows** installer **1.5.9** · **Linux** `.deb` amd64 **1.5.9** (Ubuntu 22.04 / 24.04) |
+| **Version** | [**1.5.10**](https://github.com/DroxKiwi/Drox---IDE---OR/releases/latest) (June 2026) · VS Code base **1.127.0** |
+| **Platforms** | **Windows** installer **1.5.10** · **Linux** `.deb` amd64 **1.5.9** (Ubuntu 22.04 / 24.04) |
 | **Daily driver?** | **No** — early adopters / dogfood. |
-| **1.5.9 highlights** | Stick-to-bottom scroll · `MEMORY.md` reset · lean composer · What's new splash. |
+| **1.5.10 highlights** | Persistent recovery · deferred respawn · live metrics · composer padding. |
+| **1.5.9** | Stick-to-bottom scroll · `MEMORY.md` reset · lean composer. |
 | **1.5.8** | Native thinking Reasoning · chronological Work thread · Plan vignette · warmup in log · ask_user padding. |
 | **1.5.7** | LLM error recovery · smart paste · session replay. |
 | **1.4.x** | **Obsolete** — do not build on it. |
@@ -547,7 +549,7 @@ Same as FR: `PermissionMode`, path/bash permissions, explicit `done`, context co
 | FR | EN |
 |----|-----|
 | [NOTICE.md](NOTICE.md) | License & attributions |
-| [stable/1.5.9/RELEASE_NOTES.md](stable/1.5.9/RELEASE_NOTES.md) | Release notes |
+| [stable/1.5.10/RELEASE_NOTES.md](stable/1.5.10/RELEASE_NOTES.md) | Release notes |
 | [stable/1.5.8/RELEASE_NOTES.md](stable/1.5.8/RELEASE_NOTES.md) | Previous release |
 | [Issues](https://github.com/DroxKiwi/Drox---IDE---OR/issues) | Install & update issues |
 | Sources (privé) | Branche `1.5.10` sur dépôt KDDS |
