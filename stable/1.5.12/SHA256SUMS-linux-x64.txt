@@ -1,0 +1,1 @@
+699a01a126e4d2be34edca98251b02ef28c0f5272f45fc64443fb3850bd0ee8c  Drox-IDE-1.5.12-linux-x64.deb
