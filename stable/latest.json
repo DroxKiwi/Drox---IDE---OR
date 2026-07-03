@@ -5,13 +5,13 @@
   "platforms": {
     "win32-x64": {
       "installerUrl": "https://github.com/DroxKiwi/Drox---IDE---OR/releases/download/v1.5.13/Drox-IDE-Setup-1.5.13-win32-x64.exe",
-      "sha256": "2c1a90f1e333e4ea26723f6924011a68e8d7678e1e12f06a2d339e143c2e9505",
-      "sizeBytes": 241307621
+      "sha256": "acf2668cdb65388a5615ecefcac6ffed4824cdebd37c16d1bf34f743e181fbeb",
+      "sizeBytes": 241293423
     },
     "linux-x64": {
       "installerUrl": "https://github.com/DroxKiwi/Drox---IDE---OR/releases/download/v1.5.13/Drox-IDE-1.5.13-linux-x64.deb",
-      "sha256": "9832d07868c68dc1e550c1c6ec7b79f6061a364026191493c2f7f3fdffd796b2",
-      "sizeBytes": 233504440
+      "sha256": "d94e334201f2793ab8a3f98f67b8f62902f06527600ceee539ebcf5483429834",
+      "sizeBytes": 233507940
     }
   },
   "mandatory": false,

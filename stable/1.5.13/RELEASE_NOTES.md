@@ -5,6 +5,11 @@
 - **Sessions parallèles** : envoi non bloquant — une discussion peut continuer en arrière-plan pendant que vous ouvrez une autre session.
 - **Nouvelle discussion** : le bouton New ouvre le compositeur sans héritage du dossier actif ; choix explicite du projet.
 
+## Correctifs (2026-07-03 — hotfix streaming arrière-plan)
+
+- **Discussion en cours** : changer de session pendant une réponse du modèle ne coupe plus le run — le stream continue en arrière-plan et le fil est intact au retour.
+- **Liste Sessions** : indicateur **In Progress** (spinner) sur la discussion pendant le traitement en arrière-plan.
+
 ## Correctifs (2026-07-03 — hotfix rebuild)
 
 - Rebuild installateur Windows et paquet Linux (même version **1.5.13**, nouveaux SHA256 sur OR).
