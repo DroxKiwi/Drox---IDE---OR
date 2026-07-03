@@ -5,6 +5,11 @@
 - **Sessions parallèles** : envoi non bloquant — une discussion peut continuer en arrière-plan pendant que vous ouvrez une autre session.
 - **Nouvelle discussion** : le bouton New ouvre le compositeur sans héritage du dossier actif ; choix explicite du projet.
 
+## Correctifs (2026-07-03 — hotfix rebuild)
+
+- Rebuild installateur Windows et paquet Linux (même version **1.5.13**, nouveaux SHA256 sur OR).
+- Si au relancement vous voyez l’écran **Electron** (« path-to-app ») : utiliser le raccourci **Menu Démarrer → Drox IDE → Drox IDE** (install `%LocalAppData%\Programs\Drox IDE`), pas un ancien raccourci pointant vers un dossier de développement. Désépingler puis réépingler depuis ce raccourci si besoin.
+
 ## Correctifs & fiabilité
 
 - **Fil chat au switch** : historique visible après changement de session ou de dossier (ProjectBar), avec replay tail et résolution workspace corrigés.
