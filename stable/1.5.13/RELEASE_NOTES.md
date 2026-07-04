@@ -5,6 +5,12 @@
 - **Sessions parallèles** : envoi non bloquant — une discussion peut continuer en arrière-plan pendant que vous ouvrez une autre session.
 - **Nouvelle discussion** : le bouton New ouvre le compositeur sans héritage du dossier actif ; choix explicite du projet.
 
+## Correctifs (2026-07-04 — hotfix layout, suppression session)
+
+- **Relance app** : la zone web + terminal est de nouveau restaurée après fermeture / réouverture (working set éditeur + visibilité du panel persistés).
+- **Écran vide au démarrage** : relayout automatique après restauration des sessions — plus besoin d’un clic pour afficher le contenu.
+- **Supprimer une discussion** : le menu contextuel **Delete...** supprime réellement la conversation (fichiers `.drox/sessions`) au lieu de créer un brouillon **New Session** ; bascule vers une autre discussion existante si possible.
+
 ## Correctifs (2026-07-03 — hotfix streaming arrière-plan)
 
 - **Discussion en cours** : changer de session pendant une réponse du modèle ne coupe plus le run — le stream continue en arrière-plan et le fil est intact au retour.
