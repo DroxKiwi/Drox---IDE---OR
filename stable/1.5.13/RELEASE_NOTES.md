@@ -5,6 +5,11 @@
 - **Sessions parallèles** : envoi non bloquant — une discussion peut continuer en arrière-plan pendant que vous ouvrez une autre session.
 - **Nouvelle discussion** : le bouton New ouvre le compositeur sans héritage du dossier actif ; choix explicite du projet.
 
+## Correctifs (2026-07-04 — hotfix smart paste & rafraîchissement UI)
+
+- **Smart paste** : collage depuis l’éditeur ou le terminal dans le compositeur natif — snippets visibles pour le modèle et alignés visuellement avec les fichiers joints.
+- **Démarrage / relance** : la liste des discussions et le contenu chat s’affichent sans redimensionner la fenêtre ni cliquer ; correctif quand une seule session apparaissait au lancement.
+
 ## Correctifs (2026-07-04 — hotfix layout, suppression session)
 
 - **Relance app** : la zone web + terminal est de nouveau restaurée après fermeture / réouverture (working set éditeur + visibilité du panel persistés).
